@@ -1,6 +1,6 @@
-const userModel = require('../models/usuarioModel.js'); // inserir diretorio do model
+const usuarioModel = require('../models/usuarioModel.js'); // inserir diretorio do model
 
-const userController = {
+const usuarioController = {
 
     cadastrarUsuario: async (req, res) => {
         const { nome, email, senha } = req.body; // Constante que recebe os valores inseridos no front
@@ -24,7 +24,7 @@ const userController = {
                 });
             } else {
                 return res.status(500).json({
-                    error: 'Erro ao cadastrar o usuário, tente novamente.' 
+                    error: 'Erro ao cadastrar o usuário, tente novamente.' // catch com erro em algum processo diferente
                 });
             }
         } catch (error) {
@@ -35,7 +35,7 @@ const userController = {
         }
     }
 }
-module.exports = userController;
+module.exports = usuarioController;
 
 
  
