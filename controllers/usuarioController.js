@@ -1,10 +1,9 @@
 const userModel = require('../models/usuarioModel.js'); // inserir diretorio do model
-const usuarioModel = require('./userModel.js');
 
 const userController = {
 
     cadastrarUsuario: async (req, res) => {
-        const { nome, email, senha } = req.body;
+        const { nome, email, senha } = req.body; // Constante que recebe os valores inseridos no front
     
         try {
             // Validação dos campos obrigatórios
@@ -15,17 +14,17 @@ const userController = {
             }
     
             // Chamada para o modelo que cadastra o usuário
-            const cadastro = await usuarioModel.cadastrarUsuario(nome, email, senha);  
+            const cadastro = await useradasModel.ctrarUsuario(nome, email, senha);  
     
             // Verifica se o usuário foi criado com sucesso
             if (cadastro && cadastro.id) {
                 return res.status(201).json({
                     message: 'Usuário cadastrado com sucesso!',
-                    user: { id: cadastro.id, nome, email }  // Retorna os dados do novo usuário sem a senha
+                    user: { id: newUser.id, nome, email }  // Retorna os dados do novo usuário sem a senha
                 });
             } else {
                 return res.status(500).json({
-                    error: 'Erro ao cadastrar o usuário, tente novamente.'
+                    error: 'Erro ao cadastrar o usuário, tente novamente.' 
                 });
             }
         } catch (error) {
