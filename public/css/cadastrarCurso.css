@@ -1,0 +1,132 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+body {
+    background: #201b2c;
+    color: #fff;
+    padding-top: 50px;
+    margin-bottom: 80px;
+}
+
+.container {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    padding: 1rem;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    width: 90%;
+    max-width: 400px;
+    margin: calc(50px + 1rem) auto 0;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 1rem;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #ffffffcc;
+}
+
+.btn
+ {
+    width: 100%;
+    padding: 0.75rem;
+    background: linear-gradient(135deg, #32cd32, #28a428);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+
+}
+.btn-disciplina {
+    width: 100%;
+    padding: 0.75rem;
+    background: linear-gradient(135deg, #32cd32, #28a428);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    margin-bottom: 15px;
+}
+.btn-disciplina:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 12px rgba(50, 205, 50, 0.5);
+}
+
+.btn:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 12px rgba(50, 205, 50, 0.5);
+}
+
+/* Novo estilo para cursos */
+.curso-item {
+    background: #1c1c1c;
+    color: #32cd32;
+    font-weight: bold;
+    padding: 12px;
+    border-radius: 12px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s, background 0.3s;
+    text-align: center;
+    border: 2px solid transparent;
+    text-transform: uppercase;
+}
+
+.curso-item:hover {
+    background: #2a2a2a;
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(50, 205, 50, 0.3);
+    border-color: #32cd32;
+}
+
+.discipline-list {
+    margin-top: 10px;
+}
+
+.discipline-item {
+    background-color: #3e3e3e;
+    color: #fff;
+    padding: 8px;
+    margin-bottom: 6px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.discipline-item button {
+    background: #f44336;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.discipline-item button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(255, 0, 0, 0.3);
+}
+.discipline-item button {
+    background: #f44336;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    margin-top: 8px; 
+}
+
+.discipline-item button:first-child {
+    margin-right: 10px; 
+}
