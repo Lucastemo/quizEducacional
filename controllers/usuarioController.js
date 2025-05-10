@@ -1,7 +1,6 @@
-const userModel = require('../models/usuarioModel.js'); // inserir diretorio do model
-const usuarioModel = require('./userModel.js');
+const usuarioModel = require('../models/usuarioModel.js'); // inserir diretorio do model
 
-const userController = {
+const usuarioController = {
 
     cadastrarUsuario: async (req, res) => {
         const { nome, email, senha } = req.body;
@@ -36,7 +35,7 @@ const userController = {
         }
     }
 }
-module.exports = userController;
+module.exports = usuarioController;
 
 
  
