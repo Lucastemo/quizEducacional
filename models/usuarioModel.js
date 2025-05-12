@@ -1,23 +1,23 @@
-const db = require('../config/db.js') // Inserir diretorio da conexão com o banco de dados
+const db = require('../config/db.js') 
 
 const Usuario =  {
 
 
-    cadastrarUsuario: async (nome, email, senha) => {  // Inserção dos campos
+    cadastrarUsuario: async (nome, email, senha) => { 
         try {
-            const sql = 'CALL criar_usuario (?, ?, ?)'; // Chamada da procedure
+            const sql = 'CALL criar_usuario (?, ?, ?)'; 
             
-            const [result] = await db.query(sql, [nome, email, senha]);  // Armazenamento dos campos
+            const [result] = await db.query(sql, [nome, email, senha]);
             
-            if (result && result.insertId) { // Verificação caso tenha gerado ou não o ID
+            if (result && result.insertId) { 
 
                 return {id: result.insertId, nome, email};
             
             } else {
-                throw new Error('Erro ao cadastrar usuário: ID não retornado.'); // Erro para caso não haja ID
+                throw new Error('Erro ao cadastrar usuário: ID não retornado.'); 
             }  
         } catch (error) {
-            console.error('Erro ao cadastrar usuário', error);  // catch com erro em algum processo diferente
+            console.error('Erro ao cadastrar usuário', error);  
             throw error;  
         }
     }
