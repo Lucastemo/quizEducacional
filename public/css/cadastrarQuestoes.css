@@ -1,0 +1,158 @@
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background: #201b2c;
+    color: #fff;
+    padding-top: 50px;
+    margin-bottom: 80px;
+}
+
+.container {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    padding: 1rem;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    width: 90%;
+    max-width: 600px;
+    margin: calc(50px + 1rem) auto 0;
+}
+
+
+h2 {
+    text-align: center;
+    margin-bottom: 1rem;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #ffffffcc;
+}
+
+
+.btn-questao {
+    width: 100%;
+    padding: 0.75rem;
+    background: linear-gradient(135deg, #32cd32, #28a428);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-questao:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 12px rgba(50, 205, 50, 0.5);
+}
+
+
+input, textarea, select {
+    width: 100%;
+    padding: 0.75rem;
+    margin: 8px 0;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background: #3e3e3e;
+    color: #fff;
+    font-size: 1rem;
+}
+
+input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: #32cd32;
+}
+
+
+#questoes-container {
+    margin-top: 20px;
+}
+
+.questao-item {
+    background: #1c1c1c;
+    color: #32cd32;
+    padding: 12px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    position: relative;
+    border: 2px solid transparent;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.questao-item:hover {
+    background: #2a2a2a;
+    border-color: #32cd32;
+}
+
+.questao-item p {
+    margin: 0;
+    padding-bottom: 10px;
+    font-weight: bold;
+}
+
+.questao-item ul {
+    margin: 10px 0;
+    padding-left: 20px;
+}
+
+.questao-item ul li {
+    color: #fff;
+    margin-bottom: 5px;
+}
+
+
+.questao-item button {
+    padding: 8px 12px;
+    margin: 5px 10px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+
+.questao-item .btn-edit {
+    background: #ffa500; 
+    color: white;
+}
+
+.questao-item .btn-edit:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(255, 165, 0, 0.3);
+}
+
+
+.questao-item .btn-delete {
+    background: #f44336; 
+    color: white;
+}
+
+.questao-item .btn-delete:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(255, 0, 0, 0.3);
+}
+
+
+label, select {
+    margin: 10px 0;
+    display: block;
+}
+
+select {
+    background: #3e3e3e;
+    border: 1px solid #ccc;
+    color: #fff;
+    padding: 0.75rem;
+    border-radius: 8px;
+}
+
+select:focus {
+    outline: none;
+    border-color: #32cd32;
+}
