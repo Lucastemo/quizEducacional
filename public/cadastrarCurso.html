@@ -9,9 +9,13 @@
 <body>
     <div class="container">
         <h2>Cadastro de Cursos</h2>
+<<<<<<< HEAD
         <div id="courses-container">
            
         </div>
+=======
+        <div id="courses-container"></div>
+>>>>>>> 6e957a0294186e762f6e11c4872f57b491258a3d
         <button id="add-course-btn" class="btn">Adicionar Curso</button>
     </div>
 
@@ -36,13 +40,25 @@
 
             const removeCourseButton = document.createElement("button");
             removeCourseButton.textContent = "Remover Curso";
+<<<<<<< HEAD
             removeCourseButton.classList.add("btn");
             courseDiv.appendChild(removeCourseButton);
 
+=======
+            removeCourseButton.classList.add("btn","btn-remove");
+            courseDiv.appendChild(removeCourseButton);
+
+            const editCourseButton = document.createElement("button");
+            editCourseButton.textContent = "Editar Curso";
+            editCourseButton.classList.add("btn-edit");
+            courseDiv.appendChild(editCourseButton);
+
+>>>>>>> 6e957a0294186e762f6e11c4872f57b491258a3d
             const disciplineList = document.createElement("div");
             disciplineList.classList.add("discipline-list");
             courseDiv.appendChild(disciplineList);
 
+<<<<<<< HEAD
             addDisciplineButton.addEventListener("click", function() {
                 addDiscipline(disciplineList);
             });
@@ -51,6 +67,23 @@
                 courseDiv.remove();
             });
 
+=======
+            addDisciplineButton.addEventListener("click", function () {
+                addDiscipline(disciplineList);
+            });
+
+            removeCourseButton.addEventListener("click", function () {
+                courseDiv.remove();
+            });
+
+            editCourseButton.addEventListener("click", function () {
+                const newCourseName = prompt("Digite o novo nome do curso:", courseTitle.textContent);
+                if (newCourseName) {
+                    courseTitle.textContent = newCourseName;
+                }
+            });
+
+>>>>>>> 6e957a0294186e762f6e11c4872f57b491258a3d
             document.getElementById("courses-container").appendChild(courseDiv);
         }
 
@@ -60,14 +93,50 @@
 
             const disciplineDiv = document.createElement("div");
             disciplineDiv.classList.add("discipline-item");
+<<<<<<< HEAD
             disciplineDiv.textContent = disciplineName;
+=======
+
+            const disciplineTitle = document.createElement("span");
+            disciplineTitle.textContent = disciplineName;
+            disciplineDiv.appendChild(disciplineTitle);
+
+            // Quebra de linha
+            disciplineDiv.appendChild(document.createElement("br"));
+
+            const editDisciplineButton = document.createElement("button");
+            editDisciplineButton.textContent = "Editar Disciplina";
+            editDisciplineButton.classList.add("btn-edit");
+            disciplineDiv.appendChild(editDisciplineButton);
+
+            const cadastrarQuestoesButton = document.createElement("button");
+            cadastrarQuestoesButton.textContent = "Cadastrar Questões";
+            cadastrarQuestoesButton.classList.add("btn-questao");
+            cadastrarQuestoesButton.style.marginLeft = "10px";
+            cadastrarQuestoesButton.addEventListener("click", function () {
+                const nomeDisciplina = encodeURIComponent(disciplineTitle.textContent);
+                window.location.href = `cadastrarQuestoes.html?disciplina=${nomeDisciplina}`;
+            });
+            disciplineDiv.appendChild(cadastrarQuestoesButton);
+>>>>>>> 6e957a0294186e762f6e11c4872f57b491258a3d
 
             const removeDisciplineButton = document.createElement("button");
             removeDisciplineButton.textContent = "Remover Disciplina";
             removeDisciplineButton.classList.add("btn");
             disciplineDiv.appendChild(removeDisciplineButton);
 
+<<<<<<< HEAD
             removeDisciplineButton.addEventListener("click", function() {
+=======
+            editDisciplineButton.addEventListener("click", function () {
+                const newDisciplineName = prompt("Digite o novo nome da disciplina:", disciplineTitle.textContent);
+                if (newDisciplineName) {
+                    disciplineTitle.textContent = newDisciplineName;
+                }
+            });
+
+            removeDisciplineButton.addEventListener("click", function () {
+>>>>>>> 6e957a0294186e762f6e11c4872f57b491258a3d
                 disciplineDiv.remove();
             });
 
