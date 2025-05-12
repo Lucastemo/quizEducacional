@@ -4,10 +4,6 @@
     padding: 0;
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
-<<<<<<< HEAD
-=======
-
->>>>>>> 6e957a0294186e762f6e11c4872f57b491258a3d
 body {
     background: #201b2c;
     color: #fff;
@@ -34,26 +30,6 @@ h2 {
     color: #ffffffcc;
 }
 
-<<<<<<< HEAD
-.btn
- {
-    width: 100%;
-    padding: 0.75rem;
-    background: linear-gradient(135deg, #32cd32, #28a428);
-    color: #fff;
-    border: none;
-    border-radius: 12px;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
-
-}
-.btn-disciplina {
-    width: 100%;
-    padding: 0.75rem;
-    background: linear-gradient(135deg, #32cd32, #28a428);
-=======
 
 .btn,
 .btn-disciplina,
@@ -61,7 +37,6 @@ h2 {
 .btn-edit {
     width: 100%;
     padding: 0.75rem;
->>>>>>> 6e957a0294186e762f6e11c4872f57b491258a3d
     color: #fff;
     border: none;
     border-radius: 12px;
@@ -69,10 +44,6 @@ h2 {
     font-weight: bold;
     cursor: pointer;
     transition: transform 0.2s, box-shadow 0.2s;
-<<<<<<< HEAD
-    margin-bottom: 15px;
-}
-=======
     margin-top: 10px;
 }
 
@@ -83,20 +54,11 @@ h2 {
 }
 
 .btn:hover,
->>>>>>> 6e957a0294186e762f6e11c4872f57b491258a3d
 .btn-disciplina:hover {
     transform: scale(1.02);
     box-shadow: 0 4px 12px rgba(50, 205, 50, 0.5);
 }
 
-<<<<<<< HEAD
-.btn:hover {
-    transform: scale(1.02);
-    box-shadow: 0 4px 12px rgba(50, 205, 50, 0.5);
-}
-
-/* Novo estilo para cursos */
-=======
 
 .btn-questao {
     background: linear-gradient(135deg, #1e90ff, #1c86ee);
@@ -118,7 +80,6 @@ h2 {
 }
 
 
->>>>>>> 6e957a0294186e762f6e11c4872f57b491258a3d
 .curso-item {
     background: #1c1c1c;
     color: #32cd32;
@@ -140,10 +101,6 @@ h2 {
     border-color: #32cd32;
 }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 6e957a0294186e762f6e11c4872f57b491258a3d
 .discipline-list {
     margin-top: 10px;
 }
@@ -157,16 +114,6 @@ h2 {
     text-align: center;
 }
 
-<<<<<<< HEAD
-.discipline-item button {
-    background: #f44336;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
-=======
 
 .discipline-item button {
     border: none;
@@ -176,29 +123,10 @@ h2 {
     padding: 5px 10px;
     width: auto;
     margin-top: 8px;
->>>>>>> 6e957a0294186e762f6e11c4872f57b491258a3d
 }
 
 .discipline-item button:hover {
     transform: scale(1.05);
-<<<<<<< HEAD
-    box-shadow: 0 4px 12px rgba(255, 0, 0, 0.3);
-}
-.discipline-item button {
-    background: #f44336;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
-    margin-top: 8px; 
-}
-
-.discipline-item button:first-child {
-    margin-right: 10px; 
-}
-=======
 }
 
 
@@ -220,4 +148,3 @@ h2 {
     box-shadow: 0 4px 12px rgba(255, 0, 0, 0.3);
     transform: scale(1.05);
 }
->>>>>>> 6e957a0294186e762f6e11c4872f57b491258a3d
