@@ -1,63 +1,74 @@
 const db = require('../config/db');
 
-const Questao = {
+const questaoModel = {
   // Criar nova questão
-  createQuestao: async (enunciado, dificuldade, id_disciplina) => {
+  inserirQuestao: async (enunciado, dificuldade, id_disciplina) => {
     try {
-      const [rows] = await db.query('CALL inserir_questao(?, ?, ?)',
-        [enunciado, dificuldade, id_disciplina]);
-        
-      return { enunciado, dificuldade, id_disciplina };
+
+      const sql = 'CALL inserir_questao(?, ?, ?)'
+      const [result] = await db.query(sql,[enunciado, dificuldade, id_disciplina]);
+
+      return true;
     } catch (error) {
-      throw error;
+        console.error('Error ao inserir questão');
+        throw new Error('Erro ao inserir questão');
     }
   },
 
   // Atualizar questão
-  updateQuestao: async (id, enunciado, dificuldade) => {
+  editarQuestao: async (id, enunciado, dificuldade) => {
     try {
       if (!id) {
         throw new Error('ID da questão é obrigatório!');
       }
+      const sql = 'CALL editar_questao_por_id(?, ?, ?)'
+      const [result] = await db.query(sql, [id, enunciado, dificuldade]);
 
-      await db.query('CALL editar_questao(?, ?, ?)', [id, enunciado, dificuldade]);
+      if (result.affectedRows === 0) {
+        throw new Error('Questão não encontrada!');
+        
+      }
 
-      return { id, enunciado, dificuldade };
+      return {id, enunciado, dificuldade}
+
     } catch (error) {
-      throw error;
+        console.error('Error ao editar questão', error)
+        throw new Error('Erro ao editar questão');
     }
   },
 
   // Excluir questão
-  deleteQuestao: async (id) => {
+  deletarQuestao: async (id) => {
     try {
       if (!id){ 
         throw new Error('ID da questão é obrigatório!');
     }
+      const sql = 'CALL excluir_questao(?)'
+      const [result] = await db.query(sql, [id]);
 
-      await db.query('CALL excluir_questao(?)', [id]);
-      return { id };
     } catch (error) {
-      throw error;
+       console.error('Error ao excluir questão', error);
+       throw new Error('Erro ao excluir questão');
     }
   },
 
   
-  buscarDisciplina: async (id_disciplina) => {
+  buscarQuestaoPorDisciplina: async (id_disciplina) => {
     try {
       if (!id_disciplina) {
         throw new Error('ID_disciplina é obrigatório!');
       }
-
-      const [rows] = await db.query('CALL buscar_questoes_disciplina(?)',
+      const sql = 'CALL consultar_questao_por_disciplina(?)'
+      const [rows] = await db.query(sql,
         [id_disciplina]);
 
-      return rows[0]; 
+      return rows; 
 
     } catch (error) {
-      throw error;
+       console.error('Error ao buscar disciplina', error);
+      throw error('Erro ao buscar questões por disciplina');
     }
   }
 };
 
-module.exports = Questao;
+module.exports = questaoModel;
