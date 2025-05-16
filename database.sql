@@ -36,6 +36,51 @@ END //
 
 DELIMITER ;
 
+DELIMITER //
+
+CREATE PROCEDURE buscar_usuario_maior_pontuacao(OUT usuario_id INT)
+BEGIN
+    SELECT id
+    INTO usuario_id
+    FROM Usuario
+    ORDER BY pontos DESC
+    LIMIT 1;
+END //
+
+DELIMITER ;
+DELIMITER //
+
+CREATE PROCEDURE buscar_usuario_acima_da_pontuacao(
+    IN pontuacao_limite INT,
+    OUT usuario_id INT
+)
+BEGIN
+    SELECT id
+    INTO usuario_id
+    FROM Usuario
+    WHERE pontos > pontuacao_limite
+    ORDER BY pontos ASC
+    LIMIT 1;
+END //
+
+DELIMITER ;
+DELIMITER //
+
+CREATE PROCEDURE buscar_usuarios_abaixo_da_pontuacao(
+    IN pontuacao_limite INT,
+    IN quantidade INT
+)
+BEGIN
+    SELECT id
+    FROM Usuario
+    WHERE pontos <= pontuacao_limite
+    ORDER BY pontos DESC
+    LIMIT quantidade;
+END //
+
+DELIMITER ;
+
+
 CREATE TABLE IF NOT EXISTS CURSO(
 ID INT NOT NULL PRIMARY KEY AUTO_INCREMENT UNIQUE,
 NOME VARCHAR(150) NOT NULL UNIQUE,
@@ -98,7 +143,7 @@ CREATE TABLE DISCIPLINA (
     ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     NOME VARCHAR(255) NOT NULL,
     ID_CURSO INT NOT NULL,
-    FOREIGN KEY (ID_CURSO) REFERENCES CURSO(ID)
+    CONSTRAINT fk_disciplina_curso FOREIGN KEY (ID_CURSO) REFERENCES CURSO(ID)
 );
 
 DELIMITER //
@@ -159,7 +204,7 @@ CREATE TABLE QUESTAO (
     ENUNCIADO VARCHAR(1000) NOT NULL,
     DIFICULDADE TINYINT NOT NULL CHECK (DIFICULDADE BETWEEN 1 AND 5),
     ID_DISCIPLINA INT NOT NULL,
-    FOREIGN KEY (ID_DISCIPLINA) REFERENCES DISCIPLINA(ID)
+    CONSTRAINT fk_questao_disciplina FOREIGN KEY (ID_DISCIPLINA) REFERENCES DISCIPLINA(ID)
 );
 
 DELIMITER //
@@ -222,7 +267,7 @@ ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 TEXTO VARCHAR(500) NOT NULL,
 CORRETA BOOLEAN NOT NULL,
 ID_QUESTAO INT NOT NULL,
-FOREIGN KEY (ID_QUESTAO)REFERENCES QUESTAO(ID)
+CONSTRAINT fk_alternativa_questao FOREIGN KEY (ID_QUESTAO)REFERENCES QUESTAO(ID)
 );
 
 DELIMITER //
@@ -279,10 +324,43 @@ END //
 
 DELIMITER ;
 
+DELIMITER //
+ 
+CREATE PROCEDURE verificar_correta_por_id(
+IN p_id INT)
+BEGIN
+    SELECT CORRETA
+    FROM ALTERNATIVA
+    WHERE id = p_id;
+END//
+ 
+DELIMITER ;
+
 CREATE TABLE INSIGNIA(
     ID INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     INSIGNIA_1 MEDIUMBLOB NOT NULL,
     INSIGNIA_2 MEDIUMBLOB NOT NULL,
     INSIGNIA_3 MEDIUMBLOB NOT NULL
 );
- 
+
+
+CREATE PROCEDURE buscar_insignia_por_id_e_numero (
+    IN p_id INT,
+    IN p_numero TINYINT
+)
+BEGIN
+    IF p_numero = 1 THEN
+        SELECT insignia_1 AS insignia FROM USUARIO WHERE ID = p_id;
+    ELSEIF p_numero = 2 THEN
+        SELECT insignia_2 AS insignia FROM USUARIO WHERE ID = p_id;
+    ELSEIF p_numero = 3 THEN
+        SELECT insignia_3 AS insignia FROM USUARIO WHERE ID = p_id;
+    ELSE
+        SELECT 'Número inválido. Escolha 1, 2 ou 3.' AS mensagem;
+    END IF;
+END //
+
+DELIMITER ;
+
+CALL buscar_insignia_por_id_e_numero(5, 2);
+
