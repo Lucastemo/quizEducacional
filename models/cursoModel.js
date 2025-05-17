@@ -15,9 +15,9 @@ const cursoModel = {
         throw new Error('ID do curso é necessário');
       }
       const sql = 'CALL editar_curso_por_id(?, ?, ?)';
-      
+
       const [result] = await db.query(sql, [id, nome, descricao]);
-      
+
       if (result.affectedRows === 0) {
         throw new Error('Curso não encontrado');
       }
