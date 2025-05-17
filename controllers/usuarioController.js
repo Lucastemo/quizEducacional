@@ -17,10 +17,9 @@ const usuarioController = {
             const cadastro = await usuarioModel.cadastrarUsuario(nome, email, senha);
 
             // Verifica se o usuário foi criado com sucesso
-            if (cadastro && cadastro.id) {
+            if (cadastro) {
                 return res.status(201).json({
                     message: 'Usuário cadastrado com sucesso!',
-                    user: { id: cadastro.id, nome, email }  // Retorna os dados do novo usuário sem a senha
                 });
             } else {
                 return res.status(500).json({

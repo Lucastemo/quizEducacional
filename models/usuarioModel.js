@@ -6,23 +6,13 @@ const usuarioModel =  {
     cadastrarUsuario: async (nome, email, senha) => { 
         try {
             const sql = 'CALL criar_usuario (?, ?, ?)';
-            
-            const [result] = await db.query(sql, [nome, email, senha]); 
-            
-            if (result && result.insertId) {
-
-                return {id: result.insertId, nome, email};
-            
-            } else {
-                throw new Error('Erro ao cadastrar usuário: ID não retornado.');
-            }  
+                return true;
         } catch (error) {
             console.error('Erro ao cadastrar usuário', error);  
+            return res.status(500).json({ error: "Erro ao cadastrar usuário" });
             throw error;  
         }
     },
-    
-
     verificarUsuario: async (email) => {
         //Método que verifica o email informado através da 'procedure'
         try {
@@ -36,7 +26,6 @@ const usuarioModel =  {
             return res.status(500).json({ error: 'Erro interno ao buscar usuário.'});
         }
     }
-
 };
 
 module.exports = usuarioModel;
