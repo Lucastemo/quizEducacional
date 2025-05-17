@@ -10,6 +10,7 @@ const usuarioModel =  {
             return true;
         } catch (error) {
             console.error('Erro ao cadastrar usuário', error);  
+            return res.status(500).json({ error: "Erro ao cadastrar usuário" });
             throw error;  
         }
     },
