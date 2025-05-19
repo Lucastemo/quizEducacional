@@ -36,17 +36,17 @@
     <div class="container" id="auth-container">
         <h2>Cadastrar</h2>
         <form id="register-form">
-            <div class="form-group">
+            <div class="form-group" >
                 <label for="name">Nome</label>
-                <input type="text" id="name" required />
+                <input type="text" id="nameRegistro" required />
             </div>
             <div class="form-group">
                 <label for="email">Email</label>
-                <input type="email" id="email" required />
+                <input type="email" id="emailRegistro" required />
             </div>
             <div class="form-group">
                 <label for="password">Senha</label>
-                <input type="password" id="password" required />
+                <input type="password" id="passwordRegistro" required />
             </div>
             <div class="form-group">
                 <label for="confirm-password">Repetir Senha</label>
@@ -59,5 +59,65 @@
             <a href="./login.html">Já tem conta? Entrar</a>
         </div>
 </body>
+<script>
+  document.getElementById("register-form").addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+
+    const nome = document.getElementById("nameRegistro").value;
+    const email = document.getElementById("emailRegistro").value;
+    const senha = document.getElementById("senhaRegistro").value;
+    const repetirSenha = document.getElementById("confirm-password").value;
+
+   
+    if (senha !== repetirSenha) {
+      alert("As senhas não coincidem. Por favor, tente novamente.");
+      return;
+    }
+
+   
+    await registrar(nome, email, senha);
+  });
+
+
+  async function registrar(nome, email, senha) {
+    const url = '/api/usuario'; 
+
+
+    const dados = {
+      nome: nome,
+      email: email,
+      senha: senha,
+    };
+
+    try {
+     
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json', 
+        },
+        body: JSON.stringify(dados), 
+      });
+
+    
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Usuário registrado com sucesso:', data);
+        alert('Registro bem-sucedido! Agora você pode fazer login.');
+        window.location.href = '/login';
+      } else {
+        const errorData = await response.json();
+        console.log('Erro no registro:', errorData);
+        alert('Erro no registro, tente novamente!');
+      }
+    } catch (error) {
+      console.error('Erro na requisição de registro:', error);
+      alert('Erro ao tentar registrar, tente novamente!');
+    }
+  }
+
+  
+</script>
 
 </html>

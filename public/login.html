@@ -54,5 +54,45 @@
   </div>
   <footer>Projeto Quiz | 2 Módulo 2025 | ETEC Albert Einstein</footer>
 </body>
+<script>
+  // login.js
+
+document.getElementById('loginForm').addEventListener('submit', async function(event) {
+  event.preventDefault();
+
+
+  const login = document.getElementById('email-login').value;
+  const senha = document.getElementById('password-login').value;
+
+
+  try {
+    const response = await fetch('/api/login', {
+      method: 'POST', 
+      headers: { 
+        'Content-Type': 'application/json' 
+      },
+      body: JSON.stringify({ login, senha }) 
+    });
+
+    const data = await response.json();
+
+  
+    if (data.existe) {
+      console.log('Login e senha corretos!');
+      alert('Login e senha corretos!');
+     
+    } else {
+      console.log('Login ou senha inválidos!');
+      alert('Login ou senha inválidos!');
+     
+    }
+
+  } catch (error) {
+    console.error('Erro ao enviar dados:', error);
+    alert('Erro de comunicação com o servidor');
+  }
+});
+
+</script>
 
 </html>
