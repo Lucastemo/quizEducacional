@@ -34,8 +34,8 @@
         </div>
     </div>
     <div class="container">
-        <div class="lista-ranking">
-            <table>
+        <div>
+            <table id="tabela-ranking">
                 <thead>
                     <tr>
                         <th>Jogador</th>
@@ -44,9 +44,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-
-                    </tr>
+                        <!-- Os dados serão inseridos aqui dinamicamente -->
                 </tbody>
             </table>
         </div>
@@ -60,8 +58,20 @@
     fetch('/api/ranking')
         .then(response => response.json())
         .then(data => {
-            const tableBody = document.querySelector
+            const tableBody = document.querySelector('#tabela-ranking tbody');
+
+            data.forEach((item, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${index + 1}</td> <!-- Exibe a posição -->
+                    <td>${item.jogador}</td>
+                    <td>${item.pontuacao}</td>
+                `;
+                tableBody.appendChild(row);
+            });
         })
+        .catch(error => console.error('Erro ao carregar ranking: ', error));
+        
 
 </script>
 
