@@ -6,7 +6,7 @@ CREATE TABLE USUARIO (
     ID INT NOT NULL PRIMARY KEY AUTO_INCREMENT UNIQUE,
     NOME VARCHAR(30) NOT NULL UNIQUE,
     SENHA VARCHAR(255) NOT NULL,
-    EMAIL VARCHAR(300) NOT NULL ,
+    EMAIL VARCHAR(300) NOT NULL UNIQUE,
     TIPO ENUM('user', 'admin') NOT NULL,
     PONTOS INT DEFAULT 0
 )
@@ -69,11 +69,13 @@ DELIMITER ;
 DELIMITER //
 
 CREATE PROCEDURE buscar_usuarios_abaixo_da_pontuacao(
+    OUT usuario_id INT,
     IN pontuacao_limite INT,
     IN quantidade INT
 )
 BEGIN
     SELECT id
+    INTO usuario_id
     FROM Usuario
     WHERE pontos <= pontuacao_limite
     ORDER BY pontos DESC
@@ -364,7 +366,6 @@ END //
 
 DELIMITER ;
 
-CALL buscar_insignia_por_id_e_numero(5, 2);
 
 
 
