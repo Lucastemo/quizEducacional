@@ -1,16 +1,12 @@
-const db = require ('../config/db');
+const db = require('../config/db');
 
 const alternativaModel = {
 
-    inserirAlternativa: async (texto, correta, id_questao) => {
+    novoRegistro: async (texto, correta, id_questao) => {
 
         try {
             const sql = 'CALL inserir_alternativa(?,?,?)'
-            const [rows] = await db.query(sql,[texto, correta, id_questao]);
-
-            if (!rows || rows.length === 0) {
-                ('Alternativa não encontrada')
-            }
+            await db.query(sql,[texto, correta, id_questao]);
 
             return true;
 
@@ -20,7 +16,7 @@ const alternativaModel = {
         }
     },
 
-    editarAlternativa: async (id, texto, correta) => {
+    edicaoRegistro: async (id, texto, correta) => {
 
         try {
 
@@ -29,16 +25,7 @@ const alternativaModel = {
             }
 
             const sql = 'CALL editar_alternativa_por_id(?,?,?)'
-            const [rows] = await db.query(sql,[id, texto, correta,]);
-
-            if (!rows || rows.length === 0) {
-                ('Alternativa não encontrada ou já atualizada')
-            }
-
-
-            if (result.affectRows === 0) {
-                throw new Error('Alternativa não encontrada')
-            }
+            await db.query(sql,[id, texto, correta,]);
 
             return {id, texto, correta};
             
@@ -48,7 +35,7 @@ const alternativaModel = {
         }
     },
 
-    excluirAlternativa: async (id) => {
+    excluirRegistro: async (id) => {
         
         try {
 
@@ -56,20 +43,30 @@ const alternativaModel = {
                 throw new Error('Id da alternativa é obrigatório')
             }
             const sql = 'CALL excluir_alternativa_por_id(?)'
-            const [rows] = await db.query(sql,[id]);
+            await db.query(sql,[id]);  
 
-            if (!rows || rows.length === 0) {
-                ('Alternativa não encontrada ou já excluida')
-            }
-            
             return true;
 
         } catch (error) {
-            console.error('Erro ao ecluir alternativa', error);
+            console.error('Erro ao excluir alternativa', error);
             throw new Error('Erro ao excluir alternativa')
         }
+    },
+
+    consultaPorQuestao: async (id_questao) => {
+        try {
+            if (!id_questao) {
+              throw new Error('ID_questao é obrigatório!');
+            }
+            const sql = 'CALL consultar_alternativa_por_questao(?)'
+            const [rows] = await db.query(sql,[id_questao]);
+      
+            return rows[0]; 
+
+        } catch (error) {
+            console.error('Error ao buscar alternativa', error);
+           throw error('Error ao buscar alternativa');
+         }
+       }
     }
-
-
-}
 module.exports = alternativaModel;
