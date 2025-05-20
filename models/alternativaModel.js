@@ -27,7 +27,7 @@ const alternativaModel = {
 
             const sql = 'CALL editar_alternativa_por_id(?,?,?)'
 
-            await db.query(sql,[id, texto, correta,]);
+            await db.query(sql,[id, texto, correta]);
 
 
             return {id, texto, correta};
