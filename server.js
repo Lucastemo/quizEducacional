@@ -90,6 +90,23 @@ function generateSenhaTemporaria() {
     return senha.split('').sort(() => 0.5 - Math.random()).join('');
 }
 
+// Ranking
+
+// v v v v
+//Precisa ser feito no backend
+// ^ ^ ^ ^
+
+// app.get('/ranking', (req, res) => {
+//     const sql = 'SELECT jogador, pontuacao FROM ranking ORDER BY pontuacao DESC LIMIT 10';
+//     connection.query(sql, (err, results) => {
+//         if (err) {
+//             console.error('Erro ao buscar o ranking: ', err);
+//         }
+//         res.json(results);
+//     });
+// });
+
+
 app.listen(port, () => {
     console.log(`Servidor rodando na porta ${port}`);
 });

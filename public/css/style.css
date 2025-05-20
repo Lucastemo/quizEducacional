@@ -12,6 +12,11 @@ body {
   margin-bottom: 80px;
 }
 
+.lista-ranking h3 {
+  display: flex;
+  float: left;
+  padding-left: 60px;
+}
 
 .navbar {
   position: fixed;
