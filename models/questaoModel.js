@@ -2,7 +2,7 @@ const db = require('../config/db');
 
 const questaoModel = {
   // Criar nova questão
-  inserirQuestao: async (enunciado, dificuldade, id_disciplina) => {
+  novoRegistro: async (enunciado, dificuldade, id_disciplina) => {
     try {
 
       const sql = 'CALL inserir_questao(?, ?, ?)'
@@ -16,7 +16,7 @@ const questaoModel = {
   },
 
   // Atualizar questão
-  editarQuestao: async (id, enunciado, dificuldade) => {
+  edicaoRegistro: async (id, enunciado, dificuldade) => {
     try {
       if (!id) {
         throw new Error('ID da questão é obrigatório!');
@@ -34,7 +34,7 @@ const questaoModel = {
   },
 
   // Excluir questão
-  excluirQuestao: async (id) => {
+  excluirRegistro: async (id) => {
     try {
       if (!id){ 
         throw new Error('ID da questão é obrigatório!');
@@ -51,7 +51,7 @@ const questaoModel = {
   },
 
   
-  buscarQuestoesPorDisciplina: async (id_disciplina) => {
+  consultaPorDisciplina: async (id_disciplina) => {
     try {
       if (!id_disciplina) {
         throw new Error('ID_disciplina é obrigatório!');
