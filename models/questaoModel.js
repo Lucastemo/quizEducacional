@@ -24,7 +24,7 @@ const questaoModel = {
       const sql = 'CALL editar_questao_por_id(?, ?, ?)'
       const [rows] = await db.query(sql, [id, enunciado, dificuldade]);
 
-      if (!rows || rows.affectedRows === 0) {
+      if (rows.affectedRows === 0) {
 
         throw new Error('Questão não encontrada!');  
       }
@@ -46,7 +46,7 @@ const questaoModel = {
       const sql = 'CALL excluir_questao_por_id(?)'
       const [rows] = await db.query(sql, [id]);
 
-      if (!rows || rows.length === 0) {
+      if (rows.affectedRows === 0) {
 
         throw new Error('Questão não encontrada ou já excluída.');  
       }
