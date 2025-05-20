@@ -16,8 +16,9 @@ const alternativaModel = {
         }
     },
 
-    edicaoRegistro: async (id, texto, correta) => {
 
+    edicaoRegistro: async (id, texto, correta) => {
+           
         try {
 
             if (!id){
@@ -25,7 +26,9 @@ const alternativaModel = {
             }
 
             const sql = 'CALL editar_alternativa_por_id(?,?,?)'
+
             await db.query(sql,[id, texto, correta,]);
+
 
             return {id, texto, correta};
             
@@ -36,6 +39,7 @@ const alternativaModel = {
     },
 
     excluirRegistro: async (id) => {
+
         
         try {
 
@@ -43,6 +47,7 @@ const alternativaModel = {
                 throw new Error('Id da alternativa é obrigatório')
             }
             const sql = 'CALL excluir_alternativa_por_id(?)'
+
             await db.query(sql,[id]);  
 
             return true;
@@ -69,4 +74,5 @@ const alternativaModel = {
          }
        }
     }
+
 module.exports = alternativaModel;
