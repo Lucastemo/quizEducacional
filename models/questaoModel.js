@@ -6,7 +6,7 @@ const questaoModel = {
     try {
 
       const sql = 'CALL inserir_questao(?, ?, ?)'
-      const [result] = await db.query(sql,[enunciado, dificuldade, id_disciplina]);
+      await db.query(sql,[enunciado, dificuldade, id_disciplina]);
 
       return true;
     } catch (error) {
@@ -22,12 +22,8 @@ const questaoModel = {
         throw new Error('ID da questão é obrigatório!');
       }
       const sql = 'CALL editar_questao_por_id(?, ?, ?)'
-      const [rows] = await db.query(sql, [id, enunciado, dificuldade]);
+      await db.query(sql, [id, enunciado, dificuldade]);
 
-      if (rows.affectedRows === 0) {
-
-        throw new Error('Questão não encontrada!');  
-      }
 
       return {id, enunciado, dificuldade}
 
@@ -44,13 +40,7 @@ const questaoModel = {
         throw new Error('ID da questão é obrigatório!');
     }
       const sql = 'CALL excluir_questao_por_id(?)'
-      const [rows] = await db.query(sql, [id]);
-
-      if (rows.affectedRows === 0) {
-
-        throw new Error('Questão não encontrada ou já excluída.');  
-      }
-
+      await db.query(sql, [id]);
       return true;
 
     } catch (error) {
@@ -69,7 +59,7 @@ const questaoModel = {
       const sql = 'CALL consultar_questoes_por_disciplina(?)'
       const [rows] = await db.query(sql,[id_disciplina]);
 
-      return rows; 
+      return rows[0]; 
 
     } catch (error) {
        console.error('Error ao buscar disciplina', error);
