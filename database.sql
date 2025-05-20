@@ -36,6 +36,124 @@ END //
 
 DELIMITER ;
 
+CREATE TABLE IF NOT EXISTS CURSO(
+ID INT NOT NULL PRIMARY KEY AUTO_INCREMENT UNIQUE,
+NOME VARCHAR(150) NOT NULL UNIQUE,
+DESCRICAO VARCHAR(150) NOT NULL
+);
+
+DELIMITER //
+
+CREATE PROCEDURE inserir_curso(
+    IN p_nome VARCHAR(150),
+    IN p_descricao VARCHAR(150)
+)
+BEGIN
+    INSERT INTO CURSO (NOME, DESCRICAO)
+    VALUES (p_nome, p_descricao);
+END //
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE PROCEDURE editar_curso_por_id(
+    IN p_id INT,
+    IN p_nome VARCHAR(150),
+    IN p_descricao VARCHAR(150)
+)
+BEGIN
+    UPDATE CURSO
+    SET NOME = p_nome, DESCRICAO = p_descricao
+    WHERE ID = p_id;
+END //
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE PROCEDURE excluir_curso_por_id(
+    IN p_id INT
+)
+BEGIN
+    DELETE FROM CURSO
+    WHERE ID = p_id;
+END //
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE PROCEDURE consultar_cursos()
+BEGIN
+    SELECT * FROM CURSO;
+END //
+
+DELIMITER ;
+
+
+
+
+CREATE TABLE DISCIPLINA (
+    ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    NOME VARCHAR(255) NOT NULL,
+    ID_CURSO INT NOT NULL,
+    FOREIGN KEY (ID_CURSO) REFERENCES CURSO(ID)
+);
+
+DELIMITER //
+
+CREATE PROCEDURE inserir_disciplina (
+    IN p_nome VARCHAR(255),
+    IN p_id_curso INT
+)
+BEGIN
+    INSERT INTO DISCIPLINA (NOME, ID_CURSO)
+    VALUES (p_nome, p_id_curso);
+END //
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE PROCEDURE editar_disciplina_por_id (
+    IN p_id INT,
+    IN p_novo_nome VARCHAR(255)
+)
+BEGIN
+    UPDATE DISCIPLINA
+    SET NOME = p_novo_nome
+    WHERE ID = p_id;
+END //
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE PROCEDURE excluir_disciplina_por_id (
+    IN p_id INT
+)
+BEGIN
+    DELETE FROM DISCIPLINA
+    WHERE ID = p_id;
+END //
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE PROCEDURE consultar_disciplinas_por_id_curso (
+    IN p_id_curso INT
+)
+BEGIN
+    SELECT * FROM DISCIPLINA
+    WHERE ID_CURSO = p_id_curso;
+END //
+
+DELIMITER ;
+
+
+
 CREATE TABLE QUESTAO (
     ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     ENUNCIADO VARCHAR(1000) NOT NULL,
@@ -43,3 +161,128 @@ CREATE TABLE QUESTAO (
     ID_DISCIPLINA INT NOT NULL,
     FOREIGN KEY (ID_DISCIPLINA) REFERENCES DISCIPLINA(ID)
 );
+
+DELIMITER //
+ 
+CREATE PROCEDURE inserir_questao (
+    IN p_enunciado VARCHAR(1000),
+    IN p_dificuldade TINYINT,
+    IN p_disciplina INT
+)
+BEGIN
+    INSERT INTO QUESTAO (ENUNCIADO, DIFICULDADE, ID_DISCIPLINA)
+    VALUES (p_enunciado, p_dificuldade, p_disciplina);
+END //
+ 
+DELIMITER ;
+DELIMITER //
+ 
+CREATE PROCEDURE editar_questao_por_id(
+    IN p_id INT,
+    IN p_enunciado VARCHAR(1000),
+    IN p_dificuldade TINYINT
+)
+BEGIN
+    UPDATE QUESTAO
+    SET ENUNCIADO = p_enunciado,
+        DIFICULDADE = p_dificuldade
+    WHERE ID = p_id;
+    END //
+ 
+DELIMITER ;
+ 
+DELIMITER //
+ 
+CREATE PROCEDURE excluir_questao_por_id(
+    IN p_id INT
+)
+BEGIN
+    DELETE FROM QUESTAO
+    WHERE ID = p_id;
+END //
+ 
+DELIMITER ;
+ 
+DELIMITER //
+ 
+CREATE PROCEDURE consultar_questoes_por_disciplina(
+    IN p_id_disciplina INT
+)
+BEGIN
+    SELECT * FROM QUESTAO
+    WHERE ID_DISCIPLINA = p_id_disciplina;
+END //
+ 
+DELIMITER ;
+
+
+
+CREATE TABLE IF NOT EXISTS ALTERNATIVA(
+ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+TEXTO VARCHAR(500) NOT NULL,
+CORRETA BOOLEAN NOT NULL,
+ID_QUESTAO INT NOT NULL,
+FOREIGN KEY (ID_QUESTAO)REFERENCES QUESTAO(ID)
+);
+
+DELIMITER //
+
+CREATE PROCEDURE inserir_alternativa(
+    IN p_texto VARCHAR(500),
+    IN p_correta BOOLEAN,
+    IN p_id_questao INT
+)
+BEGIN
+    INSERT INTO ALTERNATIVA (TEXTO, CORRETA, ID_QUESTAO)
+    VALUES (p_texto, p_correta, p_id_questao);
+END //
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE PROCEDURE editar_alternativa_por_id(
+    IN p_id INT,
+    IN p_texto VARCHAR(500),
+    IN p_correta BOOLEAN
+)
+BEGIN
+    UPDATE ALTERNATIVA
+    SET TEXTO = p_texto,
+        CORRETA = p_correta
+    WHERE ID = p_id;
+END //
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE PROCEDURE excluir_alternativa_por_id(
+    IN p_id INT
+)
+BEGIN
+    DELETE FROM ALTERNATIVA
+    WHERE ID = p_id;
+END //
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE PROCEDURE consultar_alternativa_por_questao(
+    IN p_id_questao INT
+)
+BEGIN
+    SELECT * FROM ALTERNATIVA
+    WHERE ID_QUESTAO = p_id_questao;
+END //
+
+DELIMITER ;
+
+CREATE TABLE INSIGNIA(
+    ID INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    INSIGNIA_1 MEDIUMBLOB NOT NULL,
+    INSIGNIA_2 MEDIUMBLOB NOT NULL,
+    INSIGNIA_3 MEDIUMBLOB NOT NULL
+);
+ 
