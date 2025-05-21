@@ -53,12 +53,13 @@ const usuarioModel = {
         try {
             const [rows] = await db.execute('CALL buscar_usuario_por_email(?)', [email]);
             if (rows.length === 0) {
-                return res.status(404).json({error: 'Usuário não encontrado.'});
+                throw new Error('Usuario não encontrado ou atualizado!');
             }
             return rows[0];
             
         } catch (error) {
-            return res.status(500).json({ error: 'Erro interno ao buscar usuário.'});
+            console.error('Error ao buscar Usuario', error)
+            throw new Error('Error ao buscar Usuario');
         }
     },
 

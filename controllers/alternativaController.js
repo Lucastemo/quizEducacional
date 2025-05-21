@@ -1,0 +1,105 @@
+const alternativaModel = require('../models/alternativaModel');
+
+const alternativaController = {
+
+    cadastrarAlternativa: async (req, res) => {
+        const { texto, correta, id_questao } = req.body;
+
+        try {
+            if (!texto || correta === undefined || !id_questao) {
+                return res.status(400).json({
+                    error: 'Texto, correta e id_questao são obrigatórios.'
+                });
+            }
+
+            const registro = await alternativaModel.novoRegistro(texto, correta, id_questao);
+
+            return res.status(201).json({
+                message: 'Alternativa registrada com sucesso!',
+                data: registro
+            });
+
+        } catch (error) {
+            console.error('Erro ao registrar nova alternativa: ', error);
+            return res.status(500).json({
+                error: 'Erro interno ao registrar alternativa.'
+            });
+        }
+    },
+
+    editarAlternativa: async (req, res) => {
+        const { id, texto, correta } = req.body;
+
+        try {
+            if (!id || !texto || correta === undefined) {
+                return res.status(400).json({
+                    error: 'ID, texto e correta são obrigatórios.'
+                });
+            }
+
+            const editado = await alternativaModel.edicaoRegistro(id, texto, correta);
+
+            return res.status(200).json({
+                message: 'Alternativa editada com sucesso!',
+                data: editado
+            });
+
+        } catch (error) {
+            console.error('Erro ao editar alternativa: ', error);
+            return res.status(500).json({
+                error: 'Erro interno ao editar alternativa.'
+            });
+        }
+    },
+
+    excluirAlternativa: async (req, res) => {
+        const { id } = req.params;
+
+        try {
+            if (!id) {
+                return res.status(400).json({
+                    error: 'ID é obrigatório.'
+                });
+            }
+
+            await alternativaModel.excluirRegistro(id);
+
+            return res.status(200).json({
+                message: 'Alternativa excluída com sucesso!'
+            });
+
+        } catch (error) {
+            console.error('Erro ao excluir alternativa: ', error);
+            return res.status(500).json({
+                error: 'Erro interno ao excluir alternativa.'
+            });
+        }
+    },
+
+    consultarAlternativa: async (req, res) => {
+        const { id_questao } = req.params;
+
+        try {
+            if (!id_questao) {
+                return res.status(400).json({
+                    error: 'id_questao é obrigatório.'
+                });
+            }
+
+            const alternativas = await alternativaModel.consultaPorQuestao(id_questao);
+
+            return res.status(200).json({
+                message: 'Alternativas encontradas com sucesso!',
+                data: alternativas
+            });
+
+        } catch (error) {
+            console.error('Erro ao consultar alternativas por questão: ', error);
+            return res.status(500).json({
+                error: 'Erro interno ao consultar alternativas.'
+            });
+        }
+    }
+};
+
+module.exports = alternativaController;
