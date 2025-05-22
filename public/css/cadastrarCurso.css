@@ -142,9 +142,26 @@ h2 {
 .btn-remove {
     background: #f44336;
     color: white;
+    width: 100%;
+    padding: 0.75rem;
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    margin-top: 10px;
 }
 
 .btn-remove:hover {
     box-shadow: 0 4px 12px rgba(255, 0, 0, 0.3);
     transform: scale(1.05);
+}
+
+.curso-item h5 {
+    color: #878787;
+    /* text-align: justify; */
+    text-transform: none;
+
 }
