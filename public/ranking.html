@@ -54,7 +54,6 @@
 
 <script>
 
-    //função para carregar o ranking
     fetch('/api/ranking')
         .then(response => response.json())
         .then(data => {
@@ -63,9 +62,9 @@
             data.forEach((item, index) => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td>${index + 1}</td> <!-- Exibe a posição -->
-                    <td>${item.jogador}</td>
-                    <td>${item.pontuacao}</td>
+                    <td>${index + 1}</td> <!-- Posição no ranking -->
+                    <td>${item.jogador}</td>  <!-- Nome do jogador -->
+                    <td>${item.pontuacao}</td> <!-- Pontuação do jogador -->
                 `;
                 tableBody.appendChild(row);
             });
