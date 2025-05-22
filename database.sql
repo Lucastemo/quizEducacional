@@ -355,11 +355,11 @@ CREATE PROCEDURE buscar_insignia_por_id_e_numero (
 )
 BEGIN
     IF p_numero = 1 THEN
-        SELECT insignia_1 AS insignia FROM USUARIO WHERE ID = p_id;
+        SELECT insignia_1 AS insignia FROM INSIGNIA WHERE ID = p_id;
     ELSEIF p_numero = 2 THEN
-        SELECT insignia_2 AS insignia FROM USUARIO WHERE ID = p_id;
+        SELECT insignia_2 AS insignia FROM INSIGNIA WHERE ID = p_id;
     ELSEIF p_numero = 3 THEN
-        SELECT insignia_3 AS insignia FROM USUARIO WHERE ID = p_id;
+        SELECT insignia_3 AS insignia FROM INSIGNIA WHERE ID = p_id;
     ELSE
         SELECT 'Número inválido. Escolha 1, 2 ou 3.' AS mensagem;
     END IF;
