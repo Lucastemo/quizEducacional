@@ -44,7 +44,9 @@
 
         function addCourse() {
             const courseName = prompt("Digite o nome do curso:");
-            if (!courseName) return;
+            const courseDesc = prompt("Digite a descrição do curso:")
+
+            if (!courseName && !courseDesc) return;
 
             const courseDiv = document.createElement("div");
             courseDiv.classList.add("curso-item");
@@ -53,6 +55,11 @@
             courseTitle.textContent = courseName;
             courseDiv.appendChild(courseTitle);
 
+            const courseTitleDesc = document.createElement("h5");
+            courseTitleDesc.textContent = courseDesc;
+            courseDiv.appendChild(courseTitleDesc);
+
+            
             const addDisciplineButton = document.createElement("button");
             addDisciplineButton.textContent = "Adicionar Disciplina";
             addDisciplineButton.classList.add("btn-disciplina");
@@ -60,7 +67,7 @@
 
             const removeCourseButton = document.createElement("button");
             removeCourseButton.textContent = "Remover Curso";
-            removeCourseButton.classList.add("btn","btn-remove");
+            removeCourseButton.classList.add("btn-remove");
             courseDiv.appendChild(removeCourseButton);
 
             const editCourseButton = document.createElement("button");
@@ -84,6 +91,10 @@
                 const newCourseName = prompt("Digite o novo nome do curso:", courseTitle.textContent);
                 if (newCourseName) {
                     courseTitle.textContent = newCourseName;
+                }
+                const newDesc = prompt("Digite a nova Descrição:", courseTitleDesc.textContent);
+                if (newDesc) {
+                    courseTitleDesc.textContent = newDesc;
                 }
             });
 
