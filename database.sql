@@ -347,6 +347,7 @@ CREATE TABLE INSIGNIA(
     INSIGNIA_3 MEDIUMBLOB NOT NULL
 );
 
+DELIMITER //
 
 CREATE PROCEDURE buscar_insignia_por_id_e_numero (
     IN p_id INT,
