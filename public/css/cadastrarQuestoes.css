@@ -53,21 +53,38 @@ h2 {
 }
 
 
-input, textarea, select {
+textarea, select {
     width: 100%;
     padding: 0.75rem;
     margin: 8px 0;
     border-radius: 8px;
     border: 1px solid #ccc;
     background: #3e3e3e;
-    color: #fff;
+    color: #000000;
     font-size: 1rem;
+    background: white;
 }
+input {
+   
+    width: 80%;
+    padding: 0.75rem;
+    margin: 8px 0;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background: #3e3e3e;
+    color: #ffffff;
+    font-size: 1rem;
+    display: flex;
+    float: left;
+    
+}
+
 
 input:focus, textarea:focus, select:focus {
     outline: none;
-    border-color: #32cd32;
+     border-color: #32cd32; 
 }
+
 
 
 #questoes-container {
@@ -145,14 +162,61 @@ label, select {
 }
 
 select {
-    background: #3e3e3e;
+    background: #ffffff;
     border: 1px solid #ccc;
-    color: #fff;
+    color: #000000;
     padding: 0.75rem;
     border-radius: 8px;
 }
 
 select:focus {
     outline: none;
-    border-color: #32cd32;
+
+     border-color: #32cd32; 
+
+}
+#radioPerg{
+    display: flex;
+    float: left;
+}
+#questao-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.resposta-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;  /* Garante que o grupo ocupe toda a largura disponível */
+}
+
+input[type="text"] {
+    flex: 100%;          /* Faz com que o campo de texto ocupe o máximo de espaço possível */
+    padding: 8px;     /* Aumenta o preenchimento para mais espaço interno */
+    font-size: 16px;  /* Ajusta o tamanho da fonte para que o campo de texto seja mais legível */
+}
+
+input[type="radio"] {
+    margin-left: 1px;
+    width: 25%;
+}
+input[type="radio"] {
+    -webkit-appearance: none;  /* Para Safari */
+    -moz-appearance: none;     /* Para Firefox */
+    appearance: none;          /* Para navegadores modernos */
+    width: 20px;               /* Tamanho da bolinha */
+    height: 20px;              /* Tamanho da bolinha */
+    border: 2px solid #ffffff; /* Cor da borda */
+    border-radius: 50%;        /* Torna o input um círculo */
+    position: relative;        /* Necessário para o pseudo-elemento */
+    background-color: #ffffff00;   /* Cor de fundo da bolinha */
+    cursor: pointer;           /* Cursor ao passar o mouse */
+}
+input[type="radio"]:checked + input[type="text"] {
+    background-color: lightgreen;  /* Cor de fundo verde */
+}
+input[type="radio"]:checked + input[type="text"] {
+    background-color: lightgreen;  /* Cor verde para a resposta correta */
 }

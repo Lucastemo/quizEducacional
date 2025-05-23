@@ -170,11 +170,16 @@ input {
   color: #000;
   font-size: 1rem;
   transition: border-color 0.2s;
+
 }
 
 input:focus {
   outline: none;
   border-color: #32cd32;
+}
+.resposta-group input[type="radio"]:focus {
+  outline: none;
+  background: #1edc1b;
 }
 
 .btn {
@@ -278,3 +283,20 @@ footer {
     font-size: 1.1rem;
   }
 }
+/* #questao-form input {
+  width: 80%;
+  padding: 0.65rem;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  background: #fff;
+  color: #000;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+  display: flex;
+  float: left;
+
+}
+input[type="radio"]{
+  display: flex;
+  float: right;
+} */
