@@ -40,9 +40,19 @@
     </div>
 
     <script>
+
+    /*
+
+
+        NÃO SEI SE FUNCION, PRECISO DO BACKEND PRA TESTAR, PRÓXIMA AULA EU 
+        PERGUNTO SOBRE O BACK E TESTO DNV, SE NÃO FUNCIONAR EU N JA NÃO SEI 
+        O QUE FAÇO, A MINHA VIDA É UMA LUTA SEM FIM, ME SINTO NO ESPAÇO AWKJDWADNO
+
+
+    */ 
         document.getElementById("add-course-btn").addEventListener("click", addCourse);
 
-        function addCourse() {
+        async function addCourse() {
             const courseName = prompt("Digite o nome do curso:");
             const courseDesc = prompt("Digite a descrição do curso:")
 
@@ -99,9 +109,37 @@
             });
 
             document.getElementById("courses-container").appendChild(courseDiv);
+
+            const cursoNome = courseName.textContent;
+            const cursoDesc = courseDesc.textContent;
+
+            try {
+                const response = await fetch('/api/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ cursoNome, cursoDesc })
+                });
+
+                const data = await response.json();
+
+                if (data.existe) {
+                    console.log('O curso já existe!');
+                }
+                else {
+                    console.log('Curso Criado com sucesso!')
+                }
+            }
+            catch (error) {
+                console.error('Erro ao criar o curso: ', error)
+                alert('Erro ao criar o curso')
+            }
+
+            
         }
 
-        function addDiscipline(disciplineList) {
+        async function addDiscipline(disciplineList) {
             const disciplineName = prompt("Digite o nome da disciplina:");
             if (!disciplineName) return;
 
@@ -147,6 +185,24 @@
             });
 
             disciplineList.appendChild(disciplineDiv);
+
+            const disciplinaNome = disciplineName;
+
+            try {
+                const response = await fetch('/api/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ disciplinaNome })
+                });
+                const data = await response.json();
+
+            } catch (error) {
+                console.error('Erro ao Criar disciplina: ', error);
+                alert('Erro ao criar disciplina');
+            }
+
         }
     </script>
 </body>
