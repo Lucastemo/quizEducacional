@@ -1,3 +1,18 @@
+<!-- -
+-
+-
+-
+-
+-
+-
+essa merda nao funciona sei la pq (dps eu vejo)
+-
+-
+-
+-
+-
+- -->
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -5,7 +20,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro de Questões</title>
     <link rel="stylesheet" href="CSS/cadastrarQuestoes.css">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css"> 
 </head>
 <body>
     <div class="navbar">
@@ -49,23 +64,31 @@
             <label for="enunciado">Enunciado da Questão:</label>
             <textarea id="enunciado" required></textarea>
 
-            <label for="resposta-correta">Resposta Correta:</label>
-            <input type="text" id="resposta-correta" required>
-
-            <label for="resposta-errada-1">Resposta Errada 1:</label>
-            <input type="text" id="resposta-errada-1" required>
-
-            <label for="resposta-errada-2">Resposta Errada 2:</label>
-            <input type="text" id="resposta-errada-2" required>
-
-            <label for="resposta-errada-3">Resposta Errada 3:</label>
-            <input type="text" id="resposta-errada-3" required>
-
-            <label for="resposta-errada-4">Resposta Errada 4:</label>
-            <input type="text" id="resposta-errada-4" required>
-
-            <button type="submit" class="btn-questao">Cadastrar Questão</button>
+            <p>Escreva as perguntas e selecione a correta.</p>
+            
+            <div class="resposta-group">
+                <input type="text" id="resposta-0" required>
+                <input type="radio" id="radioPerg0" name="resposta">
+            </div>
+            
+            <div class="resposta-group">
+                <input type="text" id="resposta-1" required>
+                <input type="radio" id="radioPerg1" name="resposta">
+            </div>
+        
+            <div class="resposta-group">
+                <input type="text" id="resposta-2" required>
+                <input type="radio" id="radioPerg2" name="resposta">
+            </div>
+        
+            <div class="resposta-group">
+                <input type="text" id="resposta-3" required>
+                <input type="radio" id="radioPerg3" name="resposta">
+            </div>
+        
+            <button type="submit" class="btn-questao" onclick="checarCorreta()">Cadastrar Questão</button>
         </form>
+        
 
     
         <div id="questoes-container">
@@ -74,108 +97,125 @@
     </div>
 
     <script>
-        let disciplinas = [];
-        let questoes = []; 
+document.getElementById("questao-form").addEventListener("submit", function(e) {
+    e.preventDefault();
 
-
-        function addDisciplina(disciplina) {
-            disciplinas.push(disciplina);
-            const select = document.getElementById("consulta-disciplina");
-            const option = document.createElement("option");
-            option.value = disciplina;
-            option.textContent = disciplina;
-            select.appendChild(option);
+    // Encontrar qual rádio está selecionado
+    let respostaCorreta = '';
+    const radios = document.querySelectorAll('input[type="radio"]');
+    
+    radios.forEach(radio => {
+        if (radio.checked) {
+            // Encontra o input de texto relacionado ao rádio selecionado
+            const textInput = radio.previousElementSibling;
+            respostaCorreta = textInput.value; // A resposta correta é o valor do campo de texto
         }
+    });
 
-     
-        function consultarQuestoes() {
-            const disciplina = document.getElementById("consulta-disciplina").value;
-            const questoesFiltradas = questoes.filter(q => q.disciplina === disciplina);
-            displayQuestoes(questoesFiltradas);
-        }
+    // Cria a questão
+    const questao = {
+        id: new Date().getTime(),
+        enunciado: document.getElementById("enunciado").value,
+        respostaCorreta: respostaCorreta,  // A resposta correta é a que foi selecionada
+        respostaErrada1: document.getElementById("resposta-0").value,
+        respostaErrada2: document.getElementById("resposta-1").value,
+        respostaErrada3: document.getElementById("resposta-2").value,
+        respostaErrada4: document.getElementById("resposta-3").value,
+        disciplina: document.getElementById("consulta-disciplina").value,
+    };
 
-      
-        function displayQuestoes(questoesParaExibir) {
-            const container = document.getElementById("questoes-container");
-            container.innerHTML = ''; 
-            questoesParaExibir.forEach(q => {
-                const div = document.createElement("div");
-                div.classList.add("questao-item");
+    // Adiciona a questão à lista de questões
+    questoes.push(questao);
 
-                const enunciado = document.createElement("p");
-                enunciado.textContent = q.enunciado;
-                div.appendChild(enunciado);
-
-                const respostas = document.createElement("ul");
-                [q.respostaCorreta, q.respostaErrada1, q.respostaErrada2, q.respostaErrada3, q.respostaErrada4].forEach(resposta => {
-                    const li = document.createElement("li");
-                    li.textContent = resposta;
-                    respostas.appendChild(li);
-                });
-                div.appendChild(respostas);
+    // Exibe as questões cadastradas
+    displayQuestoes(questoes);
+});
 
 
-                const editButton = document.createElement("button");
-                editButton.textContent = "Editar Questão";
-                editButton.classList.add("btn-edit");
-                editButton.onclick = () => editarQuestao(q.id);
-                div.appendChild(editButton);
+// Função para adicionar a disciplina ao select
+function addDisciplina(disciplina) {
+    disciplinas.push(disciplina);
+    const select = document.getElementById("consulta-disciplina");
+    const option = document.createElement("option");
+    option.value = disciplina;
+    option.textContent = disciplina;
+    select.appendChild(option);
+}
 
-                const deleteButton = document.createElement("button");
-                deleteButton.textContent = "Excluir Questão";
-                deleteButton.classList.add("btn-delete");
-                deleteButton.onclick = () => excluirQuestao(q.id);
-                div.appendChild(deleteButton);
+// Função para consultar questões filtrando pela disciplina
+function consultarQuestoes() {
+    const disciplina = document.getElementById("consulta-disciplina").value;
+    const questoesFiltradas = questoes.filter(q => q.disciplina === disciplina);
+    displayQuestoes(questoesFiltradas);
+}
 
-                container.appendChild(div);
-            });
-        }
+// Função para exibir as questões
+function displayQuestoes(questoesParaExibir) {
+    const container = document.getElementById("questoes-container");
+    container.innerHTML = '';  // Limpa as questões anteriores
+    questoesParaExibir.forEach(q => {
+        const div = document.createElement("div");
+        div.classList.add("questao-item");
 
+        const enunciado = document.createElement("p");
+        enunciado.textContent = q.enunciado;
+        div.appendChild(enunciado);
 
-        function editarQuestao(id) {
-            const questao = questoes.find(q => q.id === id);
-            if (questao) {
-                document.getElementById("enunciado").value = questao.enunciado;
-                document.getElementById("resposta-correta").value = questao.respostaCorreta;
-                document.getElementById("resposta-errada-1").value = questao.respostaErrada1;
-                document.getElementById("resposta-errada-2").value = questao.respostaErrada2;
-                document.getElementById("resposta-errada-3").value = questao.respostaErrada3;
-                document.getElementById("resposta-errada-4").value = questao.respostaErrada4;
-
-
-                questoes = questoes.filter(q => q.id !== id);
-            }
-        }
-
-        
-        function excluirQuestao(id) {
-            questoes = questoes.filter(q => q.id !== id);
-            consultarQuestoes(); 
-        }
-
-
-        document.getElementById("questao-form").addEventListener("submit", function(e) {
-            e.preventDefault();
-
-            const questao = {
-                id: new Date().getTime(),
-                enunciado: document.getElementById("enunciado").value,
-                respostaCorreta: document.getElementById("resposta-correta").value,
-                respostaErrada1: document.getElementById("resposta-errada-1").value,
-                respostaErrada2: document.getElementById("resposta-errada-2").value,
-                respostaErrada3: document.getElementById("resposta-errada-3").value,
-                respostaErrada4: document.getElementById("resposta-errada-4").value,
-                disciplina: document.getElementById("consulta-disciplina").value,
-            };
-
-            questoes.push(questao);
-            displayQuestoes(questoes); 
+        const respostas = document.createElement("ul");
+        [q.respostaCorreta, q.respostaErrada1, q.respostaErrada2, q.respostaErrada3, q.respostaErrada4].forEach(resposta => {
+            const li = document.createElement("li");
+            li.textContent = resposta;
+            respostas.appendChild(li);
         });
+        div.appendChild(respostas);
+
+        const editButton = document.createElement("button");
+        editButton.textContent = "Editar Questão";
+        editButton.classList.add("btn-edit");
+        editButton.onclick = () => editarQuestao(q.id);
+        div.appendChild(editButton);
+
+        const deleteButton = document.createElement("button");
+        deleteButton.textContent = "Excluir Questão";
+        deleteButton.classList.add("btn-delete");
+        deleteButton.onclick = () => excluirQuestao(q.id);
+        div.appendChild(deleteButton);
+
+        container.appendChild(div);
+    });
+}
+
+// Função para editar a questão
+function editarQuestao(id) {
+    const questao = questoes.find(q => q.id === id);
+    if (questao) {
+        document.getElementById("enunciado").value = questao.enunciado;
+        document.getElementById("resposta-0").value = questao.respostaCorreta;
+        document.getElementById("resposta-1").value = questao.respostaErrada1;
+        document.getElementById("resposta-2").value = questao.respostaErrada2;
+        document.getElementById("resposta-3").value = questao.respostaErrada3;
+        
+        questoes = questoes.filter(q => q.id !== id);
+    }
+}
+
+// Função para excluir a questão
+function excluirQuestao(id) {
+    questoes = questoes.filter(q => q.id !== id);
+    consultarQuestoes();  // Atualiza a lista de questões exibida
+}
+function checarCorreta(){
+    alert(respostaCorreta)
+    console.log(respostaCorreta)
+}
 
 
-        addDisciplina("Exemplo1");
-        // addDisciplina("asddasda");
-        // addDisciplina("exempol3");
+
+// Adicionando uma disciplina de exemplo (pode ser ajustado conforme necessário)
+addDisciplina("Exemplo1");
+// addDisciplina("Disciplina 2");
+// addDisciplina("Disciplina 3");
+
     </script>
 </body>
 </html>
