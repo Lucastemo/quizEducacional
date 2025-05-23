@@ -16,7 +16,6 @@ const alternativaModel = {
         }
     },
 
-
     edicaoRegistro: async (id, texto, correta) => {
            
         try {
@@ -73,8 +72,6 @@ const alternativaModel = {
            throw error('Error ao buscar alternativa');
          }
        },
-
-    //VERIFICAÇÂO DA RESPOSTA
 
     verificarResposta: async (id)=> {
         try {
