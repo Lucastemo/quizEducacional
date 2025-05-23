@@ -1,0 +1,222 @@
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background: #201b2c;
+    color: #fff;
+    padding-top: 50px;
+    margin-bottom: 80px;
+}
+
+.container {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    padding: 1rem;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    width: 90%;
+    max-width: 600px;
+    margin: calc(50px + 1rem) auto 0;
+}
+
+
+h2 {
+    text-align: center;
+    margin-bottom: 1rem;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #ffffffcc;
+}
+
+
+.btn-questao {
+    width: 100%;
+    padding: 0.75rem;
+    background: linear-gradient(135deg, #32cd32, #28a428);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-questao:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 12px rgba(50, 205, 50, 0.5);
+}
+
+
+textarea, select {
+    width: 100%;
+    padding: 0.75rem;
+    margin: 8px 0;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background: #3e3e3e;
+    color: #000000;
+    font-size: 1rem;
+    background: white;
+}
+input {
+   
+    width: 80%;
+    padding: 0.75rem;
+    margin: 8px 0;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background: #3e3e3e;
+    color: #ffffff;
+    font-size: 1rem;
+    display: flex;
+    float: left;
+    
+}
+
+
+input:focus, textarea:focus, select:focus {
+    outline: none;
+     border-color: #32cd32; 
+}
+
+
+
+#questoes-container {
+    margin-top: 20px;
+}
+
+.questao-item {
+    background: #1c1c1c;
+    color: #32cd32;
+    padding: 12px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    position: relative;
+    border: 2px solid transparent;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.questao-item:hover {
+    background: #2a2a2a;
+    border-color: #32cd32;
+}
+
+.questao-item p {
+    margin: 0;
+    padding-bottom: 10px;
+    font-weight: bold;
+}
+
+.questao-item ul {
+    margin: 10px 0;
+    padding-left: 20px;
+}
+
+.questao-item ul li {
+    color: #fff;
+    margin-bottom: 5px;
+}
+
+
+.questao-item button {
+    padding: 8px 12px;
+    margin: 5px 10px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+
+.questao-item .btn-edit {
+    background: #ffa500; 
+    color: white;
+}
+
+.questao-item .btn-edit:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(255, 165, 0, 0.3);
+}
+
+
+.questao-item .btn-delete {
+    background: #f44336; 
+    color: white;
+}
+
+.questao-item .btn-delete:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(255, 0, 0, 0.3);
+}
+
+
+label, select {
+    margin: 10px 0;
+    display: block;
+}
+
+select {
+    background: #ffffff;
+    border: 1px solid #ccc;
+    color: #000000;
+    padding: 0.75rem;
+    border-radius: 8px;
+}
+
+select:focus {
+    outline: none;
+
+     border-color: #32cd32; 
+
+}
+#radioPerg{
+    display: flex;
+    float: left;
+}
+#questao-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.resposta-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;  /* Garante que o grupo ocupe toda a largura disponível */
+}
+
+input[type="text"] {
+    flex: 100%;          /* Faz com que o campo de texto ocupe o máximo de espaço possível */
+    padding: 8px;     /* Aumenta o preenchimento para mais espaço interno */
+    font-size: 16px;  /* Ajusta o tamanho da fonte para que o campo de texto seja mais legível */
+}
+
+input[type="radio"] {
+    margin-left: 1px;
+    width: 25%;
+}
+input[type="radio"] {
+    -webkit-appearance: none;  /* Para Safari */
+    -moz-appearance: none;     /* Para Firefox */
+    appearance: none;          /* Para navegadores modernos */
+    width: 20px;               /* Tamanho da bolinha */
+    height: 20px;              /* Tamanho da bolinha */
+    border: 2px solid #ffffff; /* Cor da borda */
+    border-radius: 50%;        /* Torna o input um círculo */
+    position: relative;        /* Necessário para o pseudo-elemento */
+    background-color: #ffffff00;   /* Cor de fundo da bolinha */
+    cursor: pointer;           /* Cursor ao passar o mouse */
+}
+input[type="radio"]:checked + input[type="text"] {
+    background-color: lightgreen;  /* Cor de fundo verde */
+}
+input[type="radio"]:checked + input[type="text"] {
+    background-color: lightgreen;  /* Cor verde para a resposta correta */
+}
