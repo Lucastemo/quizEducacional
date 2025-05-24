@@ -84,6 +84,23 @@ END //
 
 DELIMITER ;
 
+DELIMITER //
+
+CREATE PROCEDURE alterar_pontos_por_id_usuario (
+    IN p_id_usuario INT,
+    IN p_novo_ponto INT
+)
+BEGIN
+    
+    UPDATE USUARIO
+    SET PONTOS = p_novo_ponto
+    WHERE ID = p_id_usuario;
+
+END //
+
+DELIMITER ;
+
+
 
 CREATE TABLE IF NOT EXISTS CURSO(
 ID INT NOT NULL PRIMARY KEY AUTO_INCREMENT UNIQUE,

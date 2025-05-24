@@ -16,7 +16,6 @@ const alternativaModel = {
         }
     },
 
-
     edicaoRegistro: async (id, texto, correta) => {
            
         try {
@@ -72,7 +71,23 @@ const alternativaModel = {
             console.error('Error ao buscar alternativa', error);
            throw error('Error ao buscar alternativa');
          }
-       }
+       },
+
+    verificarResposta: async (id)=> {
+        try {
+            if (!id) {
+              throw new Error('ID é obrigatório!');
+            }
+        const sql = 'CALL verificar_correta_por_id(?)'
+        const [rows] = await db.query(sql,[id]);
+
+        return rows[0];
+
+       } catch (error) {
+        console.error('Error ao verificar resposta (ID)', error);
+        throw error('Error ao verificar resposta (ID)');
+        }
     }
+}
 
 module.exports = alternativaModel;
