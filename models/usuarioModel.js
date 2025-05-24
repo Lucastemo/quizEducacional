@@ -19,11 +19,13 @@ const usuarioModel =  {
         try {
             const [rows] = await db.execute('CALL buscar_usuario_por_email(?)', [email]);
             if (rows.length === 0) {
+                throw new Error('Usuario não encontrado ou atualizado!');
             }
             return rows[0];
             
         } catch (error) {
-            throw new error
+            console.error('Error ao buscar Usuario', error)
+            throw new Error('Error ao buscar Usuario');
         }
     }
 };
