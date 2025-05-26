@@ -15,9 +15,6 @@ app.use(express.json());
 // Rotas Usuario
 app.post('/api/usuario', usuarioController.cadastrarUsuario);
 
-// Rotas Curso
-app.post('/api/curso', cursoController.novoRegistro);
-
 // ROTAS PARA questaoController
 app.get('/api/questao/:id_disciplina', questaoController.consultarQuestao);
 app.post('/api/questao', questaoController.cadastrarQuestao);
