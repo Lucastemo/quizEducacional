@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro</title>
+    <link rel="stylesheet" href="./CSS/style.css" />
+</head>
+
+<body>
+    <div class="navbar">
+        <div class="quiz-menu">
+            <span>Quiz ▾</span>
+            <div class="menu-dropdown">
+                <a href="./quiz/juridico">Serviços Jurídicos</a>
+                <a href="./quiz/desenvolvimento-sistemas">Desenvolvimento de Sistemas</a>
+                <a href="./quiz/eletronica">Eletrônica</a>
+                <a href="./quiz/administracao">Administração</a>
+            </div>
+        </div>
+        <div class="links">
+            <a href="inicio.html">Início</a>
+        </div>
+        <div class="user-info">
+            <svg viewBox="0 0 24 24">
+                <circle cx="12" cy="8" r="4" />
+                <path d="M6 20c0-3.333 2.667-6 6-6s6 2.667 6 6" />
+            </svg>
+            <div class="user-dropdown">
+                <a href="./login.html" id="user-status">Login</a>
+                <a href="./index.html" id="user-details">Convidado</a>
+            </div>
+        </div>
+    </div>
+    <div class="container" id="auth-container">
+        <h2>Cadastrar</h2>
+        <form id="register-form">
+            <div class="form-group" >
+                <label for="name">Nome</label>
+                <input type="text" id="nameRegistro" required />
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="emailRegistro" required />
+            </div>
+            <div class="form-group">
+                <label for="password">Senha</label>
+                <input type="password" id="senhaRegistro" required />
+            </div>
+            <div class="form-group">
+                <label for="confirm-password">Repetir Senha</label>
+                <input type="password" id="confirm-password" required />
+                <span id="error-message" class="error"></span>
+            </div>
+            <button type="submit" class="btn">Cadastrar</button>
+        </form>
+        <div class="links">
+            <a href="./login.html">Já tem conta? Entrar</a>
+        </div>
+</body>
+<script>
+  document.getElementById("register-form").addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+
+    const nome = document.getElementById("nameRegistro").value;
+    const email = document.getElementById("emailRegistro").value;
+    const senha = document.getElementById("senhaRegistro").value;
+    const repetirSenha = document.getElementById("confirm-password").value;
+
+   
+    if (senha !== repetirSenha) {
+      alert("As senhas não coincidem. Por favor, tente novamente.");
+      return;
+    }
+
+   
+    await registrar(nome, email, senha);
+  });
+
+
+  async function registrar(nome, email, senha) {
+    const url = '/api/usuario'; 
+
+
+    const dados = {
+      nome: nome,
+      email: email,
+      senha: senha,
+    };
+
+    try {
+     
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json', 
+        },
+        body: JSON.stringify(dados), 
+      });
+
+    
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Usuário registrado com sucesso:', data);
+        alert('Registro bem-sucedido! Agora você pode fazer login.');
+        window.location.href = '/login';
+      } else {
+        const errorData = await response.json();
+        console.log('Erro no registro:', errorData);
+        alert('Erro no registro, tente novamente!');
+      }
+    } catch (error) {
+      console.error('Erro na requisição de registro:', error);
+      alert('Erro ao tentar registrar, tente novamente!');
+    }
+  }
+
+  
+</script>
+
+</html>

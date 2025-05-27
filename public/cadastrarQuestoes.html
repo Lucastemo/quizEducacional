@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cadastrar Questão</title>
+  <link rel="stylesheet" href="css/cadastrarQuestoes.css" />
+</head>
+<body>
+  <div class="container">
+    <h2>Cadastrar Nova Questão</h2>
+    <form id="questao-form">
+      <label for="disciplina">Disciplina:</label>
+      <select id="disciplina" name="disciplina" required>
+        <option value="">Selecione uma disciplina</option>
+      </select>
+
+      <label for="pergunta">Pergunta:</label>
+      <textarea id="pergunta" name="pergunta" rows="3" required></textarea>
+
+      <label>Insira as Respostas e selecione a correta:</label>
+      <div class="resposta-group">
+        <input type="radio" name="resposta_correta" value="0" />
+        <input type="text" name="resposta[]" required />
+      </div>
+      <div class="resposta-group">
+        <input type="radio" name="resposta_correta" value="1" />
+        <input type="text" name="resposta[]" required />
+      </div>
+      <div class="resposta-group">
+        <input type="radio" name="resposta_correta" value="2" />
+        <input type="text" name="resposta[]" required />
+      </div>
+      <div class="resposta-group">
+        <input type="radio" name="resposta_correta" value="3" />
+        <input type="text" name="resposta[]" required />
+      </div>
+
+      <label>Selecione a Dificuldade da questão:</label>
+      <div id="radioPerg">
+        <label><input type="radio" name="dificuldade" value="1" required /> 1</label>
+        <label><input type="radio" name="dificuldade" value="2" /> 2</label>
+        <label><input type="radio" name="dificuldade" value="3" /> 3</label>
+        <label><input type="radio" name="dificuldade" value="4" /> 4</label>
+      </div>
+
+      <button type="submit" class="btn-questao">Cadastrar Questão</button>
+    </form>
+  </div>
+
+  <script>
+
+    //script ainda nao foi testado!!
+
+    document.addEventListener("DOMContentLoaded", () => {
+      // Carregar disciplinas do backend
+      fetch("/api/questao/:id_disciplina")
+        .then(res => res.json())
+        .then(disciplinas => {
+          const select = document.getElementById("disciplina");
+          disciplinas.forEach(d => {
+            const opt = document.createElement("option");
+            opt.value = d.id;
+            opt.textContent = d.nome;
+            select.appendChild(opt);
+          });
+        })
+        .catch(err => console.error("Erro ao carregar disciplinas:", err));
+
+      //cor verde no input
+      const radios = document.querySelectorAll('input[name="resposta_correta"]');
+      radios.forEach((radio, index) => {
+        radio.addEventListener("change", () => {
+          document.querySelectorAll('input[name="resposta[]"]').forEach((input, i) => {
+            input.style.backgroundColor = i == index ? "lightgreen" : "white";
+          });
+        });
+      });
+
+      // // Enviar questão para o backend
+      document.getElementById("questao-form").addEventListener("submit", e => {
+        e.preventDefault();
+
+        const respostas = Array.from(document.querySelectorAll('input[name="resposta[]"]')).map(i => i.value.trim());
+        const correta = document.querySelector('input[name="resposta_correta"]:checked')?.value;
+        const pergunta = document.getElementById("pergunta").value.trim();
+        const disciplinaId = document.getElementById("disciplina").value;
+        const dificuldade = document.querySelector('input[name="dificuldade"]:checked')?.value;
+
+        if (!pergunta || !disciplinaId || !dificuldade || correta === undefined || respostas.some(r => r === "")) {
+          alert("Preencha todos os campos corretamente.");
+          return;
+        }
+
+        fetch("/api/questao", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            pergunta,
+            disciplinaId,
+            dificuldade: parseInt(dificuldade),
+            respostas,
+            respostaCorreta: parseInt(correta)
+          })
+        })
+        .then(res => {
+          if (!res.ok) throw new Error("Erro ao cadastrar");
+          return res.json();
+        })
+        .then(() => {
+          alert("Questão cadastrada com sucesso!");
+          document.getElementById("questao-form").reset();
+          document.querySelectorAll('input[name="resposta[]"]').forEach(input => input.style.backgroundColor = "white");
+        })
+        .catch(err => {
+          console.error(err);
+          alert("Erro ao cadastrar a questão.");
+        });
+      });
+    }
+    );
+  </script>
+</body>
+</html>

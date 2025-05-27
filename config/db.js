@@ -8,7 +8,6 @@ const connection = mysql.createConnection ( {
  database: 'QUIZ', 
 });
 
-// Conectar ao bano de dados
 connection.connect((err) => {
  if (err) {
   console.error('Erro de conexão: ' + err.stack);
