@@ -13,12 +13,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 
 // Rotas Usuario
-app.post('/api/testeToken', usuarioController.validarLogin)
-app.get('/usuario', usuarioController.verificarToken, (req, res) => {
-    console.log('Acesso permitido.');
-    res.json([{message: "Token validado com sucesso.", ID:  req.userId.userId}])
-})
-
 app.post('/api/usuario', usuarioController.cadastrarUsuario);
 
 // ROTAS PARA questaoController

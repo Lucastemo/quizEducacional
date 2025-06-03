@@ -48,15 +48,14 @@ const usuarioController = {
             }
         
             const token = jwt.sign({userId: usuario[0].ID}, SECRET, 
-                {expiresIn: 3600});
+                {expiresIn: 7200});
 
                 return res.status(200).json({auth: true, token});
 
         } catch (error) {
             console.error(error);
             res.status(500).json({ message: 'Erro interno no servidor. ' });
-        }
-        
+        } 
     },
     
     verificarToken: (req, res, next) => {
@@ -83,17 +82,14 @@ const usuarioController = {
     },
 
     verificarAdmin : async (req, res, next) => {
+
         ID = req.userId.userId;
         const usuario = await usuarioModel.buscarUsuario(ID);
-            console.log(usuario);
-            console.log("\n-----\n" + usuario[0].TIPO);
             if(usuario[0].TIPO === "user"){
                 console.log('Usuário não autorizado');
                 return res.status(401).json({auth: false, message: 'Usuário não autorizado.'});
             }
          next();
     }
-
-
 }
 module.exports = usuarioController;
