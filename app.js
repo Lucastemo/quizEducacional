@@ -22,16 +22,16 @@ app.get('/usuario', usuarioController.verificarToken, (req, res) => {
 app.post('/api/usuario', usuarioController.cadastrarUsuario);
 
 // ROTAS PARA questaoController
-app.get('/api/questao/:id_disciplina', questaoController.consultarQuestao);
-app.post('/api/questao', questaoController.cadastrarQuestao);
-app.put('/api/questao', questaoController.editarQuestao);
-app.delete('/api/questao/:id', questaoController.excluirQuestao);
+app.get('/api/questao/:id_disciplina', usuarioController.verificarToken, questaoController.consultarQuestao);
+app.post('/api/questao', usuarioController.verificarToken, usuarioController.verificarAdmin ,questaoController.cadastrarQuestao);
+app.put('/api/questao', usuarioController.verificarToken, usuarioController.verificarAdmin, questaoController.editarQuestao);
+app.delete('/api/questao/:id', usuarioController.verificarToken, usuarioController.verificarAdmin, questaoController.excluirQuestao);
 
 // ROTAS PARA alternativaController
-app.get('/api/alternativa/:id_questao', alternativaController.consultarAlternativa);
-app.post('/api/alternativa', alternativaController.cadastrarAlternativa);
-app.put('/api/alternativa', alternativaController.editarAlternativa);
-app.delete('/api/alternativa/:id', alternativaController.excluirAlternativa);
+app.get('/api/alternativa/:id_questao', usuarioController.verificarToken, alternativaController.consultarAlternativa);
+app.post('/api/alternativa', usuarioController.verificarToken, usuarioController.verificarAdmin, alternativaController.cadastrarAlternativa);
+app.put('/api/alternativa', usuarioController.verificarToken, usuarioController.verificarAdmin, alternativaController.editarAlternativa);
+app.delete('/api/alternativa/:id', usuarioController.verificarToken, usuarioController.verificarAdmin, alternativaController.excluirAlternativa);
 
 
 
