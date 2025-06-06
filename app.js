@@ -14,6 +14,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 
 // Rotas Usuario
+app.post('/api/login', usuarioController.validarLogin);
 app.post('/api/usuario', usuarioController.cadastrarUsuario);
 
 // ROTAS PARA questaoController
