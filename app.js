@@ -27,6 +27,10 @@ app.get('/loginUsuario', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'login.html'));
 })
 
+app.get('/esqueci', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'esqueci.html'));
+})
+
 // ROTAS BACK-END
 
 // Rotas Usuario
