@@ -10,8 +10,24 @@ const app = express();
 
 const PORT = 3000;
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use('/css', express.static(path.join(__dirname, 'public', 'css')));
 app.use(express.json());
+
+// ROTAS FRONT-END
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+})
+
+app.get('/cadastrarUsuario', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'registro.html'));
+})
+
+app.get('/loginUsuario', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'login.html'));
+})
+
+// ROTAS BACK-END
 
 // Rotas Usuario
 app.post('/api/login', usuarioController.validarLogin);
