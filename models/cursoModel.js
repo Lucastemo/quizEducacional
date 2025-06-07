@@ -1,12 +1,12 @@
-const db = require('../config/db.js') 
+const db = require('../config/db.js')
 
 const cursoModel = {
-    novoRegisto: async (nome, descricao) => {
+    novoRegistro: async (nome, descricao) => {
         try {
-            const sql = 'CALL inserir_curso (?, ?)';
+            const sql = 'CALL inserir_curso(?, ?)';
             await db.query(sql, [nome, descricao]);
 
-           return true;
+            return true;
         } catch (error) {
             console.error('Erro ao registrar novo curso', error);
             throw error;
@@ -14,56 +14,49 @@ const cursoModel = {
     },
 
     edicaoRegistro: async (id, nome, descricao) => {
-    try {
+        try {
 
-      const sql = 'CALL editar_curso_por_id(?, ?, ?)';
-      
-      await db.query(sql, [id, nome, descricao]);
+            const sql = 'CALL editar_curso_por_id(?, ?, ?)';
 
-      if (result.affectedRows === 0) {
-        throw new Error('Curso não encontrado');
-      }
+            await db.query(sql, [id, nome, descricao]);
+            
+            return true
 
-      return true
-
-    } catch (error) {
-        console.error('Erro ao editar curso ', error)
-      throw error;
-    }
-  },
-  
-  excluirRegistro: async(id)=>{
-    try {
-      
-      const sql = 'CALL excluir_curso_por_id(?)'
-
-      await db.query(sql, [id]);
-
-      if(result.affectedRows === 0){
-        throw new Error("Curso não encontrado!");
-      }
-
-    } catch (error) {
-      throw error
-    }
-  
+        } catch (error) {
+            console.error('Erro ao editar curso ', error)
+            throw error;
+        }
     },
 
-    consultaRegistro: async (req, res) => {
-            //Método que verifica o email informado através da 'procedure'
-            try {
-              const sql = 'CALL consultar_cursos';
+    excluirRegistro: async (id) => {
+        try {
 
-              await db.execute(sql);
-                if (result.length === 0) {
-                    return res.status(404).json({error: 'Curso não encontrado.'});
-                }
-                return result[0];
-                
-            } catch (error) {
-                return res.status(500).json({ error: 'Erro interno ao buscar curso.'});
-            }
+            const sql = 'CALL excluir_curso_por_id(?)'
+
+            await db.query(sql, [id]);
+
+            return true;
+
+        } catch (error) {
+            throw error
         }
+
+    },
+
+    consultarTodosRegistros: async (req, res) => {
+        //Método que verifica o email informado através da 'procedure'
+        try {
+            const sql = 'CALL consultar_cursos()';
+
+            const [result] = await db.execute(sql);
+    
+            return result[0];
+
+        } catch (error) {
+        Console.error('Erro ao buscar cursos: ', error);
+        return error;
+        }
+    }
 
 };
 

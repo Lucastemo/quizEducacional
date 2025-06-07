@@ -15,7 +15,7 @@ const cursoController = {
             const registro = await cursoModel.novoRegistro(nome, descricao);
 
             if (registro) {
-                return res.status(200).json({
+                return res.status(201).json({
                     message: 'Curso registrado com sucesso!',
                     data: registro
                 });
@@ -33,7 +33,8 @@ const cursoController = {
     },
 
     edicaoRegistro: async (req, res) => {
-        const { id, nome, descricao } = req.body;
+        const { nome, descricao } = req.body;
+        const { id } = req.params;
 
         try {
             if (!id || !nome || !descricao) {
@@ -50,7 +51,7 @@ const cursoController = {
                 });
             } else {
                 return res.status(500).json({
-                    error: 'Erro ao realizar edição, tente novamente.'
+                    error: 'Erro ao realizar edição.'
                 });
             }
         } catch (error) {
@@ -62,7 +63,7 @@ const cursoController = {
     },
 
     excluirRegistro: async (req, res) => {
-        const { id } = req.body;
+        const { id } = req.params;
 
         try {
             if (!id) {
@@ -77,8 +78,8 @@ const cursoController = {
                     message: 'Exclusão feita com sucesso!'
                 });
             } else {
-                return res.status(404).json({
-                    error: 'Curso não encontrado ou não excluído.'
+                return res.status(500).json({
+                    error: 'Curso não excluído.'
                 });
             }
         } catch (error) {
@@ -91,18 +92,13 @@ const cursoController = {
 
     consultaRegistro: async (req, res) => {
         try {
-            const registros = await cursoModel.consultarTodosRegistros();
+            const cursos = await cursoModel.consultarTodosRegistros();
 
-            if (registros && registros.length > 0) {
-                return res.status(200).json({
-                    message: 'Registros encontrados com sucesso!',
-                    data: registros
-                });
-            } else {
-                return res.status(404).json({
-                    error: 'Nenhum curso encontrado.'
-                });
-            }
+            res.status(200).json({
+                message: 'Cursos encontrados com sucesso!',
+                data: cursos
+            })
+            
         } catch (error) {
             console.error('Erro ao consultar registros: ', error);
             return res.status(500).json({
