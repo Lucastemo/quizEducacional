@@ -1,10 +1,11 @@
 const express = require('express');
 const path = require('path');
 
-
+const cursoController = require('./controllers/cursoController');
 const usuarioController = require('./controllers/usuarioController');
 const questaoController = require('./controllers/questaoController');
 const alternativaController = require('./controllers/alternativaController');
+const disciplinaController = require('./controllers/disciplinaController');
 
 const app = express();
 
@@ -37,6 +38,18 @@ app.get('/esqueci', (req, res) => {
 app.post('/api/login', usuarioController.validarLogin);
 app.post('/api/usuario', usuarioController.cadastrarUsuario);
 
+// ROTAS PARA cursoController
+app.get('/api/curso', cursoController.consultaRegistro);
+app.post('/api/curso', cursoController.novoRegistro);
+app.put('/api/curso/:id', cursoController.edicaoRegistro);
+app.delete('/api/curso/:id', cursoController.excluirRegistro);
+
+// ROTAS PARA disciplinasController
+app.get('/api/disciplina/:id_curso', disciplinaController);
+app.post('/api/disciplina', disciplinaController);
+app.put('/api/disciplina/:id', disciplinaController);
+app.delete('/api/disciplinas/:id', disciplinaController);
+
 // ROTAS PARA questaoController
 app.get('/api/questao/:id_disciplina', usuarioController.verificarToken, questaoController.consultarQuestao);
 app.post('/api/questao', usuarioController.verificarToken, usuarioController.verificarAdmin ,questaoController.cadastrarQuestao);
@@ -48,6 +61,7 @@ app.get('/api/alternativa/:id_questao', usuarioController.verificarToken, altern
 app.post('/api/alternativa', usuarioController.verificarToken, usuarioController.verificarAdmin, alternativaController.cadastrarAlternativa);
 app.put('/api/alternativa', usuarioController.verificarToken, usuarioController.verificarAdmin, alternativaController.editarAlternativa);
 app.delete('/api/alternativa/:id', usuarioController.verificarToken, usuarioController.verificarAdmin, alternativaController.excluirAlternativa);
+
 
 
 
