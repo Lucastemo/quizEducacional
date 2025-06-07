@@ -1,0 +1,140 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background: #201b2c;
+    color: #fff;
+    padding-top: 50px;
+    margin-bottom: 80px;
+}
+
+.container {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    padding: 1rem;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    width: 90%;
+    max-width: 600px;
+    margin: calc(50px + 1rem) auto 0;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 1rem;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #ffffffcc;
+}
+
+label {
+    margin-top: 10px;
+    display: block;
+    font-weight: bold;
+    color: #fff;
+}
+
+textarea,
+select,
+input[type="text"] {
+    width: 100%;
+    padding: 0.75rem;
+    margin: 8px 0;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background: white;
+    color: #000000;
+    font-size: 1rem;
+}
+
+input[type="text"] {
+    flex: 1;
+    background: white;
+    color: black;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: #32cd32;
+}
+
+#questao-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.resposta-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+input[type="radio"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ffffff;
+    border-radius: 50%;
+    background-color: transparent;
+    cursor: pointer;
+    position: relative;
+}
+
+input[type="radio"]:checked::before {
+    content: "";
+    width: 10px;
+    height: 10px;
+    background-color: #32cd32;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+
+input[type="radio"]:checked + input[type="text"] {
+    background-color: lightgreen;
+    color: black;
+}
+
+#radioPerg {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+    gap: 10px;
+}
+
+#radioPerg label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.btn-questao {
+    width: 100%;
+    padding: 0.75rem;
+    background: linear-gradient(135deg, #32cd32, #28a428);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    margin-top: 10px;
+}
+
+.btn-questao:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 12px rgba(50, 205, 50, 0.5);
+}

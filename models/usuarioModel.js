@@ -23,8 +23,17 @@ const usuarioModel =  {
             return rows[0];
             
         } catch (error) {
-            console.error('Error ao buscar Usuario', error)
+            console.error('Error ao buscar Usuario', error);
             throw new Error('Error ao buscar Usuario');
+        }
+    },
+    buscarUsuario: async (id) => {
+        try {
+            const [rows] = await db.execute('CALL buscar_usuario_por_id(?)', [id]);
+            return rows[0];
+            
+        } catch (error) {
+            console.error('Error ao buscar Usuario', error);
         }
     }
 };
