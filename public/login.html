@@ -20,7 +20,7 @@
       </div>
     </div>
     <div class="links">
-      <a href="inicio.html">Início</a>
+      <a href="/">Início</a>
     </div>
     <div class="user-info">
       <svg viewBox="0 0 24 24">
@@ -28,8 +28,8 @@
         <path d="M6 20c0-3.333 2.667-6 6-6s6 2.667 6 6" />
       </svg>
       <div class="user-dropdown">
-        <a href="./login.html" id="user-status">Login</a>
-        <a href="./index.html" id="user-details">Convidado</a>
+        <a href="loginUsuario" id="user-status">Login</a>
+        <a href="/" id="user-details">Convidado</a>
       </div>
     </div>
   </div>
@@ -47,8 +47,8 @@
       <button type="submit" class="btn">Entrar</button>
     </form>
     <div class="links">
-      <a href="./registro.html">Cadastrar-se</a> |
-      <a href="./esqueci.html">Esqueci minha senha</a>
+      <a href="cadastrarUsuario">Cadastrar-se</a> |
+      <a href="esqueci">Esqueci minha senha</a>
     </div>
   </div>
   <footer>Projeto Quiz | 2 Módulo 2025 | ETEC Albert Einstein</footer>
@@ -59,10 +59,8 @@
 document.getElementById('login-form').addEventListener('submit', async function(event) {
   event.preventDefault();
 
-
   const login = document.getElementById('email-login').value;
   const senha = document.getElementById('password-login').value;
-
 
   try {
     const response = await fetch('/api/login', {
@@ -70,21 +68,17 @@ document.getElementById('login-form').addEventListener('submit', async function(
       headers: { 
         'Content-Type': 'application/json' 
       },
-      body: JSON.stringify({ login, senha }) 
+      body: JSON.stringify({ email: login, senha }) 
     });
 
     const data = await response.json();
+    if (response.ok) {
+      alert('Login feito com sucesso!');
+    } else {
+      alert('Login ou senha inválidos!');
+    }
 
   
-    if (data.existe) {
-      console.log('Login e senha corretos!');
-      alert('Login e senha corretos!');
-     
-    } else {
-      console.log('Login ou senha inválidos!');
-      alert('Login ou senha inválidos!');
-     
-    }
 
   } catch (error) {
     console.error('Erro ao enviar dados:', error);
