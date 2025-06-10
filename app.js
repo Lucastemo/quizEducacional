@@ -45,10 +45,10 @@ app.put('/api/curso/:id', cursoController.edicaoRegistro);
 app.delete('/api/curso/:id', cursoController.excluirRegistro);
 
 // ROTAS PARA disciplinasController
-app.get('/api/disciplina/:id_curso', disciplinaController);
-app.post('/api/disciplina', disciplinaController);
-app.put('/api/disciplina/:id', disciplinaController);
-app.delete('/api/disciplinas/:id', disciplinaController);
+app.get('/api/disciplina/:id_curso', disciplinaController.consultaPorCurso);
+app.post('/api/disciplina', disciplinaController.novoRegistro);
+app.put('/api/disciplina/:id', disciplinaController.edicaoRegistro);
+app.delete('/api/disciplinas/:id', disciplinaController.excluirRegistro);
 
 // ROTAS PARA questaoController
 app.get('/api/questao/:id_disciplina', usuarioController.verificarToken, questaoController.consultarQuestao);
