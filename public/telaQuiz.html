@@ -25,9 +25,15 @@
     
   </header>
   <main>
-    <!-- Seleção da matéria -->
-    <select id="selecaoMateria" onchange="carregarPerguntasMateria()">
-      <option value="">Selecione uma matéria</option>
+        <!-- Seleção da curso -->
+    <select id="selecaoCurso" onchange="carregarPerguntasMateria()">
+      <option value="">Selecione um Curso</option>
+      <!-- as opções serão carregadas dinamicamente -->
+    </select>
+
+    <!-- Seleção da disciplina -->
+    <select id="selecaoDisciplina" onchange="carregarPerguntasMateria()">
+      <option value="">Selecione uma disciplina</option>
       <!-- as opções serão carregadas dinamicamente -->
     </select>
 
@@ -76,7 +82,7 @@ function popularSelectMaterias() {
 
 // Quando seleciona a matéria, carrega perguntas e reseta estado
 function carregarPerguntasMateria() {
-  const materiaSelecionada = document.getElementById('selecaoMateria').value;
+  const materiaSelecionada = document.getElementById('selecaoCurso').value;
   if (!materiaSelecionada) {
     limparQuiz();
     document.getElementById('containerPerguntas').innerHTML = "<p>Por favor, selecione uma matéria para iniciar o quiz.</p>";

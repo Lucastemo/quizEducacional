@@ -36,12 +36,24 @@
    
     <main>
         <div class="inicio">
-            <h1>Seja bem vindo ao Quiz educacional!</h1>
+            <!-- colocar o nome da pessoa logada no (nome) -->
+            <h1>Seja bem vindo ao Quiz educacional <p class="nomePlayer">(nome)</p></h1>
             <div class="ini-container">
                 <h2>Vamos começar?</h2>
-                <p>Primeiro, faça seu <a href="cadastrarUsuario">Cadastro</a> caso não tiver uma conta</p>
-                <p>Ou faça <a href="loginUsuario">Login</a> se você já for cadastrado.</p>
+
+                <br>
+
+
+                <!-- <p>Primeiro, faça seu <a href="cadastrarUsuario">Cadastro</a> caso não tiver uma conta</p>
+                <p>Ou faça <a href="loginUsuario">Login</a> se você já for cadastrado.</p> -->
                 
+
+                <button class="btn-quiz" onclick="irParaQuiz()"> Ir para o Quiz!!!</button>
+
+
+
+
+                <br><br><br>
                 <br><br>
 
                 <h3>Sobre</h3>
@@ -56,6 +68,10 @@
         </div>
     </main>
 
-    
+    <script>
+        irParaQuiz = () => {
+            window.location.href = '/telaQuiz';
+        }
+    </script>
 </body>
 </html>
