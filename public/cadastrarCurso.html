@@ -162,7 +162,7 @@
             }
         }
 
-        async function createDisciplinaElement(disciplineName, course, disciplineId){
+        async function createDisciplinaElement(disciplineName, course, disciplineId, courseId){
             const disciplineDiv = document.createElement("div");
             disciplineDiv.classList.add("discipline-item");
 
@@ -182,6 +182,9 @@
             cadastrarQuestoesButton.textContent = "Cadastrar Questões";
             cadastrarQuestoesButton.classList.add("btn-questao");
             cadastrarQuestoesButton.style.marginLeft = "10px";
+            cadastrarQuestoesButton.addEventListener('click', function() {
+                window.location.href = `/cadastrarQuestao/${courseId}/${disciplineId}`;
+            });
             disciplineDiv.appendChild(cadastrarQuestoesButton);
 
             const removeDisciplineButton = document.createElement("button");
@@ -211,7 +214,7 @@
                 const data = await response.json();
                 if (data.data && data.data.length > 0){
                     data.data.forEach(discipline => {
-                        createDisciplinaElement(discipline.NOME, course, discipline.ID);
+                        createDisciplinaElement(discipline.NOME, course, discipline.ID, id_curso);
                     });
                 }
             } catch (error) {
