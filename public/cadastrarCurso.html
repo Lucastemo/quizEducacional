@@ -82,7 +82,7 @@
         }
 
         // Função para criar um novo curso na interface
-        function createCourseElement(courseName, courseDesc) {
+        function createCourseElement(courseName, courseDesc, courseId) {
             const courseDiv = document.createElement("div");
             courseDiv.classList.add("curso-item");
 
@@ -102,6 +102,7 @@
             const removeCourseButton = document.createElement("button");
             removeCourseButton.textContent = "Remover Curso";
             removeCourseButton.classList.add("btn-remove");
+            removeCourseButton.addEventListener('click', function() { deletarCurso(courseId) });
             courseDiv.appendChild(removeCourseButton);
 
             const editCourseButton = document.createElement("button");
@@ -208,13 +209,26 @@
                     coursesContainer.innerHTML = "";  // Limpa os cursos exibidos anteriormente
 
                     data.data.forEach(course => {
-                        createCourseElement(course.NOME, course.DESCRICAO);
+                        createCourseElement(course.NOME, course.DESCRICAO, course.ID);
                     });
                 } else {
                     document.getElementById("courses-container").innerHTML = "<p>Nenhum curso cadastrado.</p>";
                 }
             } catch (error) {
                 console.error("Erro ao carregar cursos:", error);
+            }
+        }
+
+        async function deletarCurso(id){
+            try {
+                const response = await fetch(`/api/curso/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+            } catch (error) {
+                console.error("Erro ao apagar cursos");
             }
         }
 
