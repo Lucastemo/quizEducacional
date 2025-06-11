@@ -82,7 +82,7 @@
         }
 
         // Função para criar um novo curso na interface
-        function createCourseElement(courseName, courseDesc, courseId) {
+        async function createCourseElement(courseName, courseDesc, courseId) {
             const courseDiv = document.createElement("div");
             courseDiv.classList.add("curso-item");
 
@@ -112,10 +112,11 @@
 
             const disciplineList = document.createElement("div");
             disciplineList.classList.add("discipline-list");
+            await carregarDisciplinas(courseId, disciplineList);
             courseDiv.appendChild(disciplineList);
 
             addDisciplineButton.addEventListener("click", function () {
-                addDiscipline(disciplineList);
+                addDiscipline(courseId);
             });
 
             removeCourseButton.addEventListener("click", function () {
@@ -138,10 +139,30 @@
         }
 
         // Função para adicionar disciplinas a um curso
-        async function addDiscipline(disciplineList) {
+        async function addDiscipline(id_curso) {
             const disciplineName = prompt("Digite o nome da disciplina:");
             if (!disciplineName) return;
 
+            // Envia a disciplina para o backend
+            try {
+                const response = await fetch('/api/disciplina', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ nome: disciplineName, id_curso: id_curso })
+                });
+                const data = await response.json();
+
+                window.alert('Disciplina adicionada com sucesso!');
+                location.reload()
+            } catch (error) {
+                console.error('Erro ao adicionar disciplina:', error);
+                alert('Erro ao adicionar disciplina.');
+            }
+        }
+
+        async function createDisciplinaElement(disciplineName, course){
             const disciplineDiv = document.createElement("div");
             disciplineDiv.classList.add("discipline-item");
 
@@ -179,23 +200,20 @@
                 disciplineDiv.remove();
             });
 
-            disciplineList.appendChild(disciplineDiv);
+            course.appendChild(disciplineDiv);
+        }
 
-            // Envia a disciplina para o backend
+        async function carregarDisciplinas(id_curso, course){
             try {
-                const response = await fetch('/api/curso', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ disciplinaNome: disciplineName })
-                });
+                const response = await fetch(`/api/disciplina/${id_curso}`, { method: 'GET' });
                 const data = await response.json();
-
-                console.log('Disciplina adicionada:', data);
+                if (data.data && data.data.length > 0){
+                    data.data.forEach(discipline => {
+                        createDisciplinaElement(discipline.NOME, course);
+                    });
+                }
             } catch (error) {
-                console.error('Erro ao adicionar disciplina:', error);
-                alert('Erro ao adicionar disciplina.');
+                
             }
         }
 
