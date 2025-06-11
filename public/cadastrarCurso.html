@@ -194,6 +194,7 @@
                 const newDisciplineName = prompt("Digite o novo nome da disciplina:", disciplineTitle.textContent);
                 if (newDisciplineName) {
                     disciplineTitle.textContent = newDisciplineName;
+                    editDiscipline(disciplineTitle.textContent, disciplineId);
                 }
             });
 
@@ -275,6 +276,22 @@
                     body: JSON.stringify({
                         'nome': nome,
                         'descricao': descricao
+                    })
+                });
+            } catch (error) {
+                console.error("Erro ao apagar cursos");
+            }
+        }
+
+        async function editDiscipline(nome, id){
+            try {
+                const response = await fetch(`/api/disciplina/${id}`, {
+                    method: 'put',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        'nome': nome
                     })
                 });
             } catch (error) {
