@@ -1,0 +1,49 @@
+{
+  "matematica": [
+    {
+      "id": 1,
+      "texto": "Quanto é 2 + 2?",
+      "alternativas": {
+        "A": "3",
+        "B": "4",
+        "C": "5",
+        "D": "6"
+      },
+      "resposta_correta": "B"
+    }, {
+      "id": 1,
+      "texto": "Quanto é 8 + 2?",
+      "alternativas": {
+        "A": "10",
+        "B": "4",
+        "C": "5",
+        "D": "6"
+      },
+      "resposta_correta": "A"
+    }, 
+    {
+      "id": 1,
+      "texto": "Quanto é 2 + 4?",
+      "alternativas": {
+        "A": "3",
+        "B": "4",
+        "C": "5",
+        "D": "6"
+      },
+      "resposta_correta": "D"
+    }
+  ],
+  "historia": [
+    {
+      "id": 1,
+      "texto": "Quem descobriu o Brasil?",
+      "alternativas": {
+        "A": "Dom Pedro I",
+        "B": "Pedro Álvares Cabral",
+        "C": "Tiradentes",
+        "D": "Machado de Assis"
+      },
+      "resposta_correta": "B"
+    }
+  ]
+}

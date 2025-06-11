@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  
+  <title>Tela Quiz</title>
+  <link rel="stylesheet" href="css/telaQuiz.css" />
+</head>
+<body>
+  <header>
+    <div class="navbar">
+      <div class="quiz-menu">
+        <span>Quiz ▾</span>
+        <div class="menu-dropdown">
+          <a href="./quiz/juridico">Serviços Jurídicos</a>
+          <a href="./quiz/desenvolvimento-sistemas">Desenvolvimento de Sistemas</a>
+          <a href="./quiz/eletronica">Eletrônica</a>
+          <a href="./quiz/administracao">Administração</a>
+        </div>
+        
+      </div>
+      <h1>Tela do Quiz (protótipo)</h1>
+    </div>
+    
+  </header>
+  <main>
+        <!-- Seleção da curso -->
+    <select id="selecaoCurso" onchange="carregarPerguntasMateria()">
+      <option value="">Selecione um Curso</option>
+      <!-- as opções serão carregadas dinamicamente -->
+    </select>
+
+    <!-- Seleção da disciplina -->
+    <select id="selecaoDisciplina" onchange="carregarPerguntasMateria()">
+      <option value="">Selecione uma disciplina</option>
+      <!-- as opções serão carregadas dinamicamente -->
+    </select>
+
+    <!-- Formulário do quiz -->
+    <form id="quizForm">
+      <div id="containerPerguntas"></div>
+      <div class="navigation">
+        <button type="button" onclick="navegar(-1)">Anterior</button>
+        <button type="button" onclick="navegar(1)">Próxima</button>
+      </div>
+    </form>
+    
+  </main>
+
+  <footer>
+    <p>Projeto Quiz | 2º Módulo - 2025 | ETEC Albert Einstein</p>
+  </footer>
+<script>
+  let todasPerguntas = {};  // Todas as perguntas por matéria
+let perguntas = [];       // Perguntas da matéria selecionada
+let respostasUsuario = {};
+let perguntaAtual = 0;
+
+// Carrega JSON com todas as perguntas agrupadas por matéria
+async function carregarTodasPerguntas() {
+  try {
+    const resposta = await fetch('perguntas.json');
+    todasPerguntas = await resposta.json();
+    popularSelectMaterias();
+  } catch (erro) {
+    console.error("Erro ao carregar perguntas:", erro);
+  }
+}
+
+// Preenche o <select> de matérias com as chaves do JSON
+function popularSelectMaterias() {
+  const select = document.getElementById('selecaoMateria');
+  select.innerHTML = `<option value="">Selecione uma matéria</option>`;
+  Object.keys(todasPerguntas).forEach(materia => {
+    const option = document.createElement('option');
+    option.value = materia;
+    option.textContent = materia.charAt(0).toUpperCase() + materia.slice(1);
+    select.appendChild(option);
+  });
+}
+
+// Quando seleciona a matéria, carrega perguntas e reseta estado
+function carregarPerguntasMateria() {
+  const materiaSelecionada = document.getElementById('selecaoCurso').value;
+  if (!materiaSelecionada) {
+    limparQuiz();
+    document.getElementById('containerPerguntas').innerHTML = "<p>Por favor, selecione uma matéria para iniciar o quiz.</p>";
+    return;
+  }
+
+  perguntas = todasPerguntas[materiaSelecionada];
+  respostasUsuario = {};
+  perguntaAtual = 0;
+
+  exibirPerguntas();
+  mostrarPergunta(perguntaAtual);
+}
+
+// Limpa área do quiz e variáveis
+function limparQuiz() {
+  perguntas = [];
+  respostasUsuario = {};
+  perguntaAtual = 0;
+  document.getElementById('containerPerguntas').innerHTML = '';
+  document.querySelector('.navigation').innerHTML = '';
+}
+
+// Cria HTML das perguntas e alternativas (escondidas inicialmente)
+function exibirPerguntas() {
+  const container = document.getElementById('containerPerguntas');
+  container.innerHTML = '';
+
+  perguntas.forEach((pergunta, index) => {
+    const div = document.createElement('div');
+    div.className = 'question';
+    div.id = `pergunta-${index}`;
+    div.style.display = 'none';
+
+    const htmlAlternativas = Object.entries(pergunta.alternativas)
+      .map(([letra, texto]) => `
+        <label>
+          <input type="radio" name="resposta${index}" value="${letra}" onchange="salvarResposta(${index}, '${letra}')">
+          ${letra}) ${texto}
+        </label><br>
+      `).join('');
+
+    div.innerHTML = `
+      <h2>${index + 1}. ${pergunta.texto}</h2>
+      <div class="options">${htmlAlternativas}</div>
+    `;
+
+    container.appendChild(div);
+  });
+}
+
+// Salva resposta do usuário no objeto
+function salvarResposta(indicePergunta, letraSelecionada) {
+  respostasUsuario[indicePergunta] = letraSelecionada;
+}
+
+// Mostra a pergunta atual (mostra só uma)
+function mostrarPergunta(index) {
+  document.querySelectorAll('.question').forEach((div, i) => {
+    div.style.display = i === index ? 'block' : 'none';
+  });
+
+  restaurarRespostaMarcada(index);
+  atualizarNavegacao();
+}
+
+// Marca a alternativa já respondida para a pergunta atual (se houver)
+function restaurarRespostaMarcada(index) {
+  const selecionada = respostasUsuario[index];
+  if (selecionada) {
+    const radios = document.getElementsByName(`resposta${index}`);
+    radios.forEach(radio => {
+      if (radio.value === selecionada) {
+        radio.checked = true;
+      }
+    });
+  }
+}
+
+// Navega entre perguntas, respeitando limites
+function navegar(direcao) {
+  const nova = perguntaAtual + direcao;
+  if (nova >= 0 && nova < perguntas.length) {
+    perguntaAtual = nova;
+    mostrarPergunta(perguntaAtual);
+  }
+}
+
+// Atualiza os botões de navegação, e botão finalizar na última pergunta
+function atualizarNavegacao() {
+  const nav = document.querySelector('.navigation');
+  if (perguntaAtual === perguntas.length - 1) {
+    nav.innerHTML = `
+      <button type="button" onclick="navegar(-1)">Anterior</button>
+      <button type="button" onclick="finalizarQuiz()">Finalizar</button>
+    `;
+  } else {
+    nav.innerHTML = `
+      <button type="button" onclick="navegar(-1)">Anterior</button>
+      <button type="button" onclick="navegar(1)">Próxima</button>
+    `;
+  }
+}
+
+// Finaliza o quiz, calcula acertos, pede nome e envia para servidor externo
+function finalizarQuiz() {
+  let acertos = 0;
+  perguntas.forEach((p, i) => {
+    if (respostasUsuario[i] === p.resposta_correta) {
+      acertos++;
+    }
+  });
+
+  alert(`Você acertou ${acertos} de ${perguntas.length} perguntas.`);
+
+  // Envia para o ranking automaticamente (usuário logado)
+  enviarRankingUsuarioLogado(acertos);
+}
+
+// Envia os dados para servidor externo via POST
+async function enviarRankingUsuarioLogado(pontos) {
+    try {
+        const resposta = await fetch('/api/ranking', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            // O back-end deve identificar o usuário logado pela sessão ou token
+            body: JSON.stringify({ pontos: pontos })
+        });
+
+        if (resposta.ok) {
+            alert('Pontuação salva no ranking com sucesso!');
+        } else {
+            alert('Erro ao salvar no ranking. Tente novamente mais tarde.');
+        }
+    } catch (erro) {
+        console.error('Erro ao enviar ranking:', erro);
+        alert('Erro de conexão ao salvar ranking.');
+    }
+}
+
+window.onload = carregarTodasPerguntas;
+
+</script>
+</body>
+</html>

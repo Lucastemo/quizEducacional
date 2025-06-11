@@ -16,10 +16,23 @@ app.use(express.json());
 
 // ROTAS FRONT-END
 
+//------------------------------------------------------------------
+// Rota para o index se estiver logado (falta o sistema de IF.)
+app.get('/indexLogado', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'indexLogado.html'));
+})
+// -----------------------------------------------------------------
+
+
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 })
-
+// ----------------------------------------------------------------
+// Rota provisoria para o Quiz
+app.get('/telaQuiz', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'telaQuiz.html'));
+})
+//-----------------------------------------------------------------
 app.get('/cadastrarUsuario', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'registro.html'));
 })
