@@ -131,6 +131,7 @@
                 if (newDesc) {
                     courseDescElement.textContent = newDesc;
                 }
+                editCourse(courseTitle.textContent, courseDescElement.textContent, courseId);
             });
 
             document.getElementById("courses-container").appendChild(courseDiv);
@@ -226,6 +227,23 @@
                     headers: {
                         'Content-Type': 'application/json'
                     }
+                });
+            } catch (error) {
+                console.error("Erro ao apagar cursos");
+            }
+        }
+
+        async function editCourse(nome, descricao, id){
+            try {
+                const response = await fetch(`/api/curso/${id}`, {
+                    method: 'put',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        'nome': nome,
+                        'descricao': descricao
+                    })
                 });
             } catch (error) {
                 console.error("Erro ao apagar cursos");
