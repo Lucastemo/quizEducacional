@@ -162,7 +162,7 @@
             }
         }
 
-        async function createDisciplinaElement(disciplineName, course){
+        async function createDisciplinaElement(disciplineName, course, disciplineId){
             const disciplineDiv = document.createElement("div");
             disciplineDiv.classList.add("discipline-item");
 
@@ -187,6 +187,7 @@
             const removeDisciplineButton = document.createElement("button");
             removeDisciplineButton.textContent = "Remover Disciplina";
             removeDisciplineButton.classList.add("btn");
+            removeDisciplineButton.addEventListener('click', function() { deletarDisciplina(disciplineId); });
             disciplineDiv.appendChild(removeDisciplineButton);
 
             editDisciplineButton.addEventListener("click", function () {
@@ -209,7 +210,7 @@
                 const data = await response.json();
                 if (data.data && data.data.length > 0){
                     data.data.forEach(discipline => {
-                        createDisciplinaElement(discipline.NOME, course);
+                        createDisciplinaElement(discipline.NOME, course, discipline.ID);
                     });
                 }
             } catch (error) {
@@ -248,6 +249,19 @@
                 });
             } catch (error) {
                 console.error("Erro ao apagar cursos");
+            }
+        }
+
+        async function deletarDisciplina(id){
+            try {
+                const response = await fetch(`/api/disciplina/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+            } catch (error) {
+                console.error("Erro ao apagar disciplina");
             }
         }
 

@@ -52,7 +52,7 @@ app.delete('/api/curso/:id', cursoController.excluirRegistro);
 app.get('/api/disciplina/:id_curso', disciplinaController.consultaPorCurso);
 app.post('/api/disciplina', disciplinaController.novoRegistro);
 app.put('/api/disciplina/:id', disciplinaController.edicaoRegistro);
-app.delete('/api/disciplinas/:id', disciplinaController.excluirRegistro);
+app.delete('/api/disciplina/:id', disciplinaController.excluirRegistro);
 
 // ROTAS PARA questaoController
 app.get('/api/questao/:id_disciplina', usuarioController.verificarToken, questaoController.consultarQuestao);
