@@ -1,4 +1,5 @@
 const express = require('express');
+const cookieParser = require('cookie-parser');
 const path = require('path');
 
 const cursoController = require('./controllers/cursoController');
@@ -14,12 +15,13 @@ const PORT = 3000;
 app.use('/css', express.static(path.join(__dirname, 'public', 'css')));
 app.use('/javascript', express.static(path.join(__dirname, 'public', 'javascript')));
 app.use(express.json());
+app.use(cookieParser());
 
 // ROTAS FRONT-END
 
 //------------------------------------------------------------------
 // Rota para o index se estiver logado (falta o sistema de IF.)
-app.get('/indexLogado', (req, res) => {
+app.get('/indexLogado', usuarioController.colocarJWTNoHeader, usuarioController.verificarToken, (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'indexLogado.html'));
 })
 // -----------------------------------------------------------------

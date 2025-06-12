@@ -50,7 +50,7 @@ const usuarioController = {
             const token = jwt.sign({userId: usuario[0].ID}, SECRET, 
                 {expiresIn: 7200});
 
-                return res.status(200).json({auth: true, token});
+                return res.status(200).json({auth: true, token: token, nome: usuario[0].NOME, tipo: usuario[0].TIPO});
 
         } catch (error) {
             console.error(error);
@@ -80,6 +80,14 @@ const usuarioController = {
             next()
         });
     },
+
+    colocarJWTNoHeader(req, res, next) {
+        const token = req.cookies.JWT; // Recupera o token JWT do cookie
+        if (token) {
+          req.headers['x-access-token'] = token; // Adiciona o token ao cabeçalho
+        }
+        next(); // Passa para o próximo middleware ou rota
+      },
 
     verificarAdmin : async (req, res, next) => {
 

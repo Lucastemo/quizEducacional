@@ -68,7 +68,21 @@
         </div>
     </main>
 
+    <script src="/javascript/cookies.js"></script>
     <script>
+        const nome = getCookie("nomeUsuario");
+        const tipo = getCookie("tipoUsuario");
+        document.getElementById("user-status").text = nome;
+        document.getElementById("user-details").text = tipo;
+        const deslogar = document.createElement("a");
+        deslogar.text = "Deslogar";
+        deslogar.addEventListener("click", () => {
+            deleteCookie("JWT");
+            deleteCookie("nomeUsuario");
+            deleteCookie("tipoUsuario");
+            location.href = "/";
+        })
+        document.getElementsByClassName("user-dropdown")[0].appendChild(deslogar);
         irParaQuiz = () => {
             window.location.href = '/telaQuiz';
         }

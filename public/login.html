@@ -79,7 +79,15 @@ document.getElementById('login-form').addEventListener('submit', async function(
       alert('Login ou senha inválidos!');
     }
 
+    deleteCookie("JWT");
+    deleteCookie("nomeUsuario");
+    deleteCookie("tipoUsuario");
+
     setCookie("JWT", data.token);
+    setCookie("nomeUsuario", data.nome);
+    setCookie("tipoUsuario", data.tipo == "user" ? "Jogador" : "Administrador");
+    
+    location.href = "/";
 
   } catch (error) {
     console.error('Erro ao enviar dados:', error);

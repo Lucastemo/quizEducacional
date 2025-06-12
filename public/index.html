@@ -58,4 +58,11 @@
 
     
 </body>
+<script src="/javascript/cookies.js"></script>
+<script>
+    const JWT = getCookie("JWT");
+    if(JWT){
+        location.href = "/indexLogado";
+    }
+</script>
 </html>
