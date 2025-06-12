@@ -53,6 +53,7 @@
   </div>
   <footer>Projeto Quiz | 2 Módulo 2025 | ETEC Albert Einstein</footer>
 </body>
+<script src="/javascript/cookies.js"></script>
 <script>
   // login.js
 
@@ -78,7 +79,7 @@ document.getElementById('login-form').addEventListener('submit', async function(
       alert('Login ou senha inválidos!');
     }
 
-  
+    setCookie("JWT", data.token);
 
   } catch (error) {
     console.error('Erro ao enviar dados:', error);

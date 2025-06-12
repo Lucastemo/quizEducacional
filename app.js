@@ -12,6 +12,7 @@ const app = express();
 const PORT = 3000;
 
 app.use('/css', express.static(path.join(__dirname, 'public', 'css')));
+app.use('/javascript', express.static(path.join(__dirname, 'public', 'javascript')));
 app.use(express.json());
 
 // ROTAS FRONT-END
