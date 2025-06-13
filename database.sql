@@ -296,6 +296,21 @@ END //
  
 DELIMITER ;
 
+DELIMITER //
+
+CREATE PROCEDURE consultar_questao_por_id(
+    IN p_id INT
+)
+BEGIN
+    SELECT * 
+    FROM QUESTAO 
+    WHERE ID = p_id
+    LIMIT 1;
+END //
+
+DELIMITER ;
+
+
 
 
 CREATE TABLE IF NOT EXISTS ALTERNATIVA(
