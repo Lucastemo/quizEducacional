@@ -32,7 +32,7 @@ app.get('/', (req, res) => {
 })
 // ----------------------------------------------------------------
 // Rota provisoria para o Quiz
-app.get('/telaQuiz', (req, res) => {
+app.get('/telaQuiz', usuarioController.colocarJWTNoHeader, usuarioController.verificarToken, (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'telaQuiz.html'));
 })
 //-----------------------------------------------------------------

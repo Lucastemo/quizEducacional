@@ -26,13 +26,13 @@
   </header>
   <main>
         <!-- Seleção da curso -->
-    <select id="selecaoCurso" onchange="carregarPerguntasMateria()">
-      <option value="">Selecione um Curso</option>
+    <select id="selecaoCurso" onchange="popularSelectDisciplinas()">
+      <option value="none">Selecione um Curso</option>
       <!-- as opções serão carregadas dinamicamente -->
     </select>
 
     <!-- Seleção da disciplina -->
-    <select id="selecaoDisciplina" onchange="carregarPerguntasMateria()">
+    <select style="display: none;" id="selecaoDisciplina" onchange="carregarPerguntasMateria()">
       <option value="">Selecione uma disciplina</option>
       <!-- as opções serão carregadas dinamicamente -->
     </select>
@@ -51,7 +51,10 @@
   <footer>
     <p>Projeto Quiz | 2º Módulo - 2025 | ETEC Albert Einstein</p>
   </footer>
+  <script src="/javascript/cookies.js"></script>
 <script>
+  JWT = getCookie("JWT");
+
   let todasPerguntas = {};  // Todas as perguntas por matéria
 let perguntas = [];       // Perguntas da matéria selecionada
 let respostasUsuario = {};
@@ -60,24 +63,76 @@ let perguntaAtual = 0;
 // Carrega JSON com todas as perguntas agrupadas por matéria
 async function carregarTodasPerguntas() {
   try {
-    const resposta = await fetch('perguntas.json');
-    todasPerguntas = await resposta.json();
-    popularSelectMaterias();
+    // const resposta = await fetch(`/api/questao/`, { method: 'GET' });
+    data = await resposta.json();
+    // popularSelectMaterias();
   } catch (erro) {
     console.error("Erro ao carregar perguntas:", erro);
   }
 }
 
+async function popularSelectCursos(){
+  try {
+    const select = document.getElementById("selecaoCurso");
+    const resposta = await fetch(`/api/curso`, { method: 'GET' });
+    const data = await resposta.json();
+    const cursos = [];
+    if(resposta.ok){
+      data.data.forEach(curso => {
+        cursos.push({ cursoNome: curso.NOME, cursoId: curso.ID });
+      });
+      cursos.forEach(curso => {
+        const opcaoDeCurso = document.createElement("option");
+        opcaoDeCurso.value = curso.cursoId;
+        opcaoDeCurso.text = curso.cursoNome;
+        select.appendChild(opcaoDeCurso);
+      });
+    }
+  } catch (error) {
+    console.log("Erro ao popular select cursos", error);
+    alert("Erro interno ao popular select cursos");
+  }
+}
+
 // Preenche o <select> de matérias com as chaves do JSON
-function popularSelectMaterias() {
-  const select = document.getElementById('selecaoMateria');
-  select.innerHTML = `<option value="">Selecione uma matéria</option>`;
-  Object.keys(todasPerguntas).forEach(materia => {
-    const option = document.createElement('option');
-    option.value = materia;
-    option.textContent = materia.charAt(0).toUpperCase() + materia.slice(1);
-    select.appendChild(option);
-  });
+async function popularSelectDisciplinas() {
+  const select = document.getElementById('selecaoDisciplina');
+  const curso = document.getElementById('selecaoCurso').value;
+
+  if(curso == "none"){
+    select.style.display = "none";
+    return;
+  }else{
+    select.style.display = "block";
+  }
+
+  try {
+    const resposta = await fetch(`/api/disciplina/${curso}`, { method: 'GET' });
+    const data = await resposta.json();
+    const disciplinas = [];
+    if(resposta.ok){
+      data.data.forEach(disciplina => {
+        disciplinas.push({ disciplinaNome: disciplina.NOME, disciplinaId: disciplina.ID });
+      });
+      disciplinas.forEach(disciplina => {
+        const opcaoDeDisciplina = document.createElement("option");
+        opcaoDeDisciplina.value = disciplina.disciplinaId;
+        opcaoDeDisciplina.text = disciplina.disciplinaNome;
+        select.appendChild(opcaoDeDisciplina);
+      });
+    }
+  } catch (error) {
+    console.log("Erro ao popular select disciplina", error);
+    alert("Erro interno ao popular select disciplina");
+  }
+
+  // select.innerHTML = `<option value="">Selecione uma matéria</option>`;
+  // Object.keys(todasPerguntas).forEach(materia => {
+  //   const option = document.createElement('option');
+  //   option.value = materia;
+  //   option.textContent = materia.charAt(0).toUpperCase() + materia.slice(1);
+  //   select.appendChild(option);
+  // });
 }
 
 // Quando seleciona a matéria, carrega perguntas e reseta estado
@@ -225,7 +280,7 @@ async function enviarRankingUsuarioLogado(pontos) {
     }
 }
 
-window.onload = carregarTodasPerguntas;
+location.onload(popularSelectCursos());
 
 </script>
 </body>
