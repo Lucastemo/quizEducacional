@@ -82,5 +82,29 @@
         <a href="inicio.html" class="btn">Voltar ao Início</a>
 
     </div>
+
+    <script>
+
+
+
+// imagino q seja isso
+// só nao achei a rota pra puxar os dados do ranking
+        fetch('/api/ranking')
+            .then(response => response.json())
+            .then(data => {
+                const tbody = document.querySelector('tbody');
+                tbody.innerHTML = '';
+
+                data.forEach((jogador, index) => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${jogador.nome}</td>
+                        <td>${jogador.pontuacao}</td>
+                        <td>${index + 1}</td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            });
+    </script>
 </body>
 </html>
