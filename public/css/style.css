@@ -339,7 +339,7 @@ input[type="radio"]{
   margin: 20px 0;
 }
 
-.ini-container .button-container button{
+.ini-container .button-container button, .button{
   padding: 14px;
   font-size: 1.4rem;
   border: none;
@@ -354,7 +354,7 @@ input[type="radio"]{
   margin: 0 auto;
 }
 
-.ini-container .button-container button:hover {
+.ini-container .button-container button:hover, .button:hover {
   transform: scale(1.03);
   box-shadow: 0 4px 12px rgba(50, 205, 50, 0.5);
 }

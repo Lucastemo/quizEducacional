@@ -34,7 +34,7 @@
     </div>
   </div>
   <div class="container" id="auth-container">
-    <h2>Login no Quiz</h2>
+    <h2 id="h2Login">Login no Quiz</h2>
     <form id="login-form">
       <div class="form-group">
         <label for="email-login">Email</label>
@@ -50,6 +50,8 @@
       <a href="cadastrarUsuario">Cadastrar-se</a> |
       <a href="esqueci">Esqueci minha senha</a>
     </div>
+    <button class="button" style="width: 100%; margin: 20px 0; display: none;" onclick="window.location.href = '/indexLogado';">Voltar para o início</button>
+    <button class="button" style="width: 100%; display: none;" onclick='deleteCookie("JWT"); deleteCookie("nomeUsuario"); deleteCookie("tipoUsuario"); location.href = "/loginUsuario";'>Deslogar</button>
   </div>
   <footer>Projeto Quiz | 2 Módulo 2025 | ETEC Albert Einstein</footer>
 </body>
@@ -57,42 +59,66 @@
 <script>
   // login.js
 
-document.getElementById('login-form').addEventListener('submit', async function(event) {
-  event.preventDefault();
+  const JWT = getCookie("JWT");
+  if(JWT){
+    const nome = getCookie("nomeUsuario");
+          const tipo = getCookie("tipoUsuario");
+          document.getElementById("user-status").text = nome;
+          document.getElementById("user-details").text = tipo;
+          const deslogar = document.createElement("a");
+          deslogar.text = "Deslogar";
+          deslogar.addEventListener("click", () => {
+              deleteCookie("JWT");
+              deleteCookie("nomeUsuario");
+              deleteCookie("tipoUsuario");
+              location.href = "/loginUsuario";
+          })
+          const botoes = Array.from(document.getElementsByClassName("button"));
+          botoes.forEach((botao) => {
+              botao.style.display = "block";
+          });
+          document.getElementById("login-form").style.display = "none";
+          document.getElementById("h2Login").innerHTML = "Você já está logado!";
+          document.getElementsByClassName("links")[1].style.display = "none";
+          document.getElementsByClassName("user-dropdown")[0].appendChild(deslogar);
+  }else{
+    document.getElementById('login-form').addEventListener('submit', async function(event) {
+    event.preventDefault();
 
-  const login = document.getElementById('email-login').value;
-  const senha = document.getElementById('password-login').value;
+    const login = document.getElementById('email-login').value;
+    const senha = document.getElementById('password-login').value;
 
-  try {
-    const response = await fetch('/api/login', {
-      method: 'POST', 
-      headers: { 
-        'Content-Type': 'application/json' 
-      },
-      body: JSON.stringify({ email: login, senha }) 
-    });
+    try {
+      const response = await fetch('/api/login', {
+        method: 'POST', 
+        headers: { 
+          'Content-Type': 'application/json' 
+        },
+        body: JSON.stringify({ email: login, senha }) 
+      });
 
-    const data = await response.json();
-    if (!response.ok) {
-      alert('Login ou senha inválidos!');
-      return;
+      const data = await response.json();
+      if (!response.ok) {
+        alert('Login ou senha inválidos!');
+        return;
+      }
+
+      deleteCookie("JWT");
+      deleteCookie("nomeUsuario");
+      deleteCookie("tipoUsuario");
+
+      setCookie("JWT", data.token);
+      setCookie("nomeUsuario", data.nome);
+      setCookie("tipoUsuario", data.tipo == "user" ? "Jogador" : "Administrador");
+      
+      location.href = "/";
+
+    } catch (error) {
+      console.error('Erro ao enviar dados:', error);
+      alert('Erro de comunicação com o servidor');
     }
-
-    deleteCookie("JWT");
-    deleteCookie("nomeUsuario");
-    deleteCookie("tipoUsuario");
-
-    setCookie("JWT", data.token);
-    setCookie("nomeUsuario", data.nome);
-    setCookie("tipoUsuario", data.tipo == "user" ? "Jogador" : "Administrador");
-    
-    location.href = "/";
-
-  } catch (error) {
-    console.error('Erro ao enviar dados:', error);
-    alert('Erro de comunicação com o servidor');
+  });
   }
-});
 
 </script>
 
