@@ -73,10 +73,9 @@ document.getElementById('login-form').addEventListener('submit', async function(
     });
 
     const data = await response.json();
-    if (response.ok) {
-      alert('Login feito com sucesso!');
-    } else {
+    if (!response.ok) {
       alert('Login ou senha inválidos!');
+      return;
     }
 
     deleteCookie("JWT");
