@@ -59,7 +59,12 @@
             <a href="loginUsuario">Já tem conta? Entrar</a>
         </div>
 </body>
+<script src="/javascript/cookies.js"></script>
 <script>
+  const JWT = getCookie("JWT");
+  if (JWT) {
+    window.location.href = "loginUsuario";
+  }
   document.getElementById("register-form").addEventListener("submit", async function(event) {
     event.preventDefault();
 
