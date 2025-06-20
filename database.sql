@@ -285,15 +285,17 @@ END //
 DELIMITER ;
  
 DELIMITER //
- 
+
 CREATE PROCEDURE consultar_questoes_por_disciplina(
     IN p_id_disciplina INT
 )
 BEGIN
     SELECT * FROM QUESTAO
-    WHERE ID_DISCIPLINA = p_id_disciplina;
+    WHERE ID_DISCIPLINA = p_id_disciplina
+    ORDER BY RAND()
+    LIMIT 10;
 END //
- 
+
 DELIMITER ;
 
 DELIMITER //
