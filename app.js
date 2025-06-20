@@ -35,6 +35,10 @@ app.get('/', (req, res) => {
 app.get('/telaQuiz', usuarioController.colocarJWTNoHeader, usuarioController.verificarToken, (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'telaQuiz.html'));
 })
+
+app.get('/telaQuiz/:id_disciplina', usuarioController.colocarJWTNoHeader, usuarioController.verificarToken, (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'telaQuiz.html'));
+})
 //-----------------------------------------------------------------
 app.get('/cadastrarUsuario', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'registro.html'));

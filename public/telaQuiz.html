@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   
   <title>Tela Quiz</title>
-  <link rel="stylesheet" href="css/telaQuiz2.css" />
+  <link rel="stylesheet" href="/css/telaQuiz2.css" />
 </head>
 <body>
 
@@ -34,17 +34,17 @@
     </select>
 
     <!-- Seleção da disciplina -->
-    <select style="display: none;" id="selecaoDisciplina" onchange="carregarPerguntasMateria()">
-      <option value="">Selecione uma disciplina</option>
+    <select style="display: none;" id="selecaoDisciplina" onchange="mostrarIniciarQuiz()">
+      <option value="none">Selecione uma disciplina</option>
       <!-- as opções serão carregadas dinamicamente -->
     </select>
 
     <!-- Formulário do quiz -->
+    <button class="button independent" style="display: none;" id="iniciarQuiz" onclick="irParaQuiz()">Iniciar Quiz</button>
     <form id="quizForm">
       <div id="containerPerguntas"></div>
-      <div class="navigation">
-        <button type="button" onclick="navegar(-1)">Anterior</button>
-        <button type="button" onclick="navegar(1)">Próxima</button>
+      <div class="navigation notVisible">
+        <button type="button" onclick="navegar(1)" id="proxima" disabled>Próxima</button>
       </div>
     </form>
     
@@ -61,6 +61,10 @@
 let perguntas = [];       // Perguntas da matéria selecionada
 let respostasUsuario = {};
 let perguntaAtual = 0;
+
+const url = window.location.href;
+const urlQuebrada = url.split('/');
+const id_disciplina = urlQuebrada[urlQuebrada.length - 1];
 
 // Carrega JSON com todas as perguntas agrupadas por matéria
 async function carregarTodasPerguntas() {
@@ -100,9 +104,13 @@ async function popularSelectCursos(){
 async function popularSelectDisciplinas() {
   const select = document.getElementById('selecaoDisciplina');
   const curso = document.getElementById('selecaoCurso').value;
+  const botaoIniciarQuiz = document.getElementById("iniciarQuiz");
+
+  select.value = "none";
 
   if(curso == "none"){
     select.style.display = "none";
+    botaoIniciarQuiz.style.display = "none";
     return;
   }else{
     select.style.display = "block";
@@ -137,16 +145,84 @@ async function popularSelectDisciplinas() {
   // });
 }
 
+function mostrarIniciarQuiz(){
+  const selectDisciplina = document.getElementById("selecaoDisciplina");
+  const botaoIniciarQuiz = document.getElementById("iniciarQuiz");
+  botaoIniciarQuiz.style.display = selectDisciplina.value == "none" ? "none" : "block";
+}
+
+function irParaQuiz(){
+  const selectDisciplina = document.getElementById("selecaoDisciplina");
+  window.location.href = `/telaQuiz/${selectDisciplina.value}`;
+}
+
+async function iniciarQuiz(){
+
+  const resposta = await fetch(`/api/questao/${id_disciplina}`, { method: 'GET',
+    headers: {
+      'x-access-token': JWT,
+      'Content-Type': 'application/json'
+    }
+   });
+    const data = await resposta.json();
+    if(!resposta.ok){
+      window.alert("Falha ao obter questões da disciplina especificada");
+      window.location.href = "/telaQuiz";
+      return;
+    }
+    questoes = data.data;
+    for(i = 0; i < questoes.length; i++){
+      const questao = questoes[i];
+        const respostaAlternativas = await fetch(`/api/alternativa/${questao.ID}`, { method: 'GET',
+      headers: {
+        'x-access-token': JWT,
+        'Content-Type': 'application/json'
+      }
+    });
+      const dataAlternativas = await respostaAlternativas.json();
+      if(!respostaAlternativas.ok){
+        window.alert("Falha ao obter questões da disciplina especificada");
+        window.location.href = "/telaQuiz";
+        return;
+      }
+      const alternativasArray = dataAlternativas.data;
+      // Aleatoriza as alternativas
+      alternativasArray.sort(() => Math.random() - 0.5);
+
+      // Cria o objeto alternativas e identifica a correta
+      const letras = ['A', 'B', 'C', 'D'];
+      let alternativaCorreta = '';
+      const alternativas = {};
+
+      alternativasArray.forEach((alt, idx) => {
+        alternativas[letras[idx]] = alt.TEXTO;
+        if (alt.CORRETA) {
+        alternativaCorreta = letras[idx];
+        }
+      });
+      alternativas.alternativaCorreta = alternativaCorreta;
+        perguntas.push({
+          id: questao.ID,
+          texto: questao.ENUNCIADO,
+          alternativas: {
+            A: alternativas.A,
+            B: alternativas.B,
+            C: alternativas.C,
+            D: alternativas.D,
+          },
+          resposta_correta: alternativas.alternativaCorreta
+        });
+    };
+    
+    document.getElementById("selecaoCurso").style.display = "none";
+    const navigation = document.getElementsByClassName("navigation")[0];
+    navigation.classList.remove("notVisible");
+    console.log(`AQUI: ${JSON.stringify(perguntas)}`);
+    carregarPerguntasMateria();
+}
+
 // Quando seleciona a matéria, carrega perguntas e reseta estado
 function carregarPerguntasMateria() {
-  const materiaSelecionada = document.getElementById('selecaoCurso').value;
-  if (!materiaSelecionada) {
-    limparQuiz();
-    document.getElementById('containerPerguntas').innerHTML = "<p>Por favor, selecione uma matéria para iniciar o quiz.</p>";
-    return;
-  }
-
-  perguntas = todasPerguntas[materiaSelecionada];
   respostasUsuario = {};
   perguntaAtual = 0;
 
@@ -163,11 +239,16 @@ function limparQuiz() {
   document.querySelector('.navigation').innerHTML = '';
 }
 
+function habilitarProximo() {
+  const botaoProximo = document.getElementById("proxima");
+  botaoProximo.disabled = false;
+}
 // Cria HTML das perguntas e alternativas (escondidas inicialmente)
 function exibirPerguntas() {
   const container = document.getElementById('containerPerguntas');
   container.innerHTML = '';
-
+  console.log(JSON.stringify(perguntas));
+  
   perguntas.forEach((pergunta, index) => {
     const div = document.createElement('div');
     div.className = 'question';
@@ -177,7 +258,7 @@ function exibirPerguntas() {
     const htmlAlternativas = Object.entries(pergunta.alternativas)
       .map(([letra, texto]) => `
         <label>
-          <input type="radio" name="resposta${index}" value="${letra}" onchange="salvarResposta(${index}, '${letra}')">
+          <input type="radio" name="resposta${index}" id="alternativa${letra}" value="${letra}" onchange="salvarResposta(${index}, '${letra}'); habilitarProximo()">
           ${letra}) ${texto}
         </label><br>
       `).join('');
@@ -223,8 +304,40 @@ function restaurarRespostaMarcada(index) {
 function navegar(direcao) {
   const nova = perguntaAtual + direcao;
   if (nova >= 0 && nova < perguntas.length) {
-    perguntaAtual = nova;
-    mostrarPergunta(perguntaAtual);
+    // Desabilita todos os rádios da pergunta atual
+    const radios = document.getElementsByName(`resposta${perguntaAtual}`);
+    radios.forEach(radio => {
+      radio.disabled = true;
+    });
+
+    // Destaca a alternativa correta da pergunta atual
+    const pergunta = perguntas[perguntaAtual];
+    if (pergunta && pergunta.resposta_correta) {
+      const correta = pergunta.resposta_correta;
+      radios.forEach(radio => {
+        const label = radio.parentElement;
+        // Limpa estilos anteriores
+        label.style.backgroundColor = "";
+        if (radio.value === correta) {
+          label.style.backgroundColor = "green";
+        }
+      });
+
+      // Se o usuário errou, destaca a alternativa escolhida em vermelho
+      const respostaUsuario = respostasUsuario[perguntaAtual];
+      if (respostaUsuario && respostaUsuario !== correta) {
+        radios.forEach(radio => {
+          if (radio.value === respostaUsuario) {
+            radio.parentElement.style.backgroundColor = "darkred";
+          }
+        });
+      }
+    }
+    // Aguarda 3 segundos antes de ir para a próxima pergunta
+    setTimeout(() => {
+      perguntaAtual = nova;
+      mostrarPergunta(perguntaAtual);
+    }, 3000);
   }
 }
 
@@ -233,30 +346,53 @@ function atualizarNavegacao() {
   const nav = document.querySelector('.navigation');
   if (perguntaAtual === perguntas.length - 1) {
     nav.innerHTML = `
-      <button type="button" onclick="navegar(-1)">Anterior</button>
-      <button type="button" onclick="finalizarQuiz()">Finalizar</button>
+      <button type="button" onclick="finalizarQuiz()" id="proxima" disabled>Finalizar</button>
     `;
   } else {
     nav.innerHTML = `
-      <button type="button" onclick="navegar(-1)">Anterior</button>
-      <button type="button" onclick="navegar(1)">Próxima</button>
+      <button type="button" onclick="navegar(1)" id="proxima" disabled>Próxima</button>
     `;
   }
 }
 
 // Finaliza o quiz, calcula acertos, pede nome e envia para servidor externo
 function finalizarQuiz() {
-  let acertos = 0;
-  perguntas.forEach((p, i) => {
-    if (respostasUsuario[i] === p.resposta_correta) {
-      acertos++;
+  const radios = document.getElementsByName(`resposta${perguntaAtual}`);
+  const pergunta = perguntas[perguntaAtual];
+  if (pergunta && pergunta.resposta_correta) {
+    const correta = pergunta.resposta_correta;
+    radios.forEach(radio => {
+      const label = radio.parentElement;
+      label.style.backgroundColor = "";
+      if (radio.value === correta) {
+        label.style.backgroundColor = "green";
+      }
+    });
+    const respostaUsuario = respostasUsuario[perguntaAtual];
+    if (respostaUsuario && respostaUsuario !== correta) {
+      radios.forEach(radio => {
+        if (radio.value === respostaUsuario) {
+          radio.parentElement.style.backgroundColor = "darkred";
+        }
+      });
     }
-  });
+    radios.forEach(radio => radio.disabled = true);
+    setTimeout(() => {
+      // O resto da função continua aqui após 3 segundos
+      let acertos = 0;
+      perguntas.forEach((p, i) => {
+        if (respostasUsuario[i] === p.resposta_correta) {
+          acertos++;
+        }
+      });
 
-  alert(`Você acertou ${acertos} de ${perguntas.length} perguntas.`);
+      alert(`Você acertou ${acertos} de ${perguntas.length} perguntas.`);
 
-  // Envia para o ranking automaticamente (usuário logado)
-  enviarRankingUsuarioLogado(acertos);
+      // Envia para o ranking automaticamente (usuário logado)
+      enviarRankingUsuarioLogado(acertos);
+    }, 3000);
+    return;
+  }
 }
 
 // Envia os dados para servidor externo via POST
@@ -282,7 +418,12 @@ async function enviarRankingUsuarioLogado(pontos) {
     }
 }
 
-location.onload(popularSelectCursos());
+if(parseInt(id_disciplina)){
+  iniciarQuiz();
+}else{
+  location.onload(popularSelectCursos());
+}
+
 
 </script>
 </body>

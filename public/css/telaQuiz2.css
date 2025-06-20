@@ -158,7 +158,11 @@ select:focus {
   flex-wrap: wrap;
 }
 
-.navigation button {
+.notVisible {
+  display: none;
+}
+
+.navigation button, .button {
   flex: 1;
   padding: 14px;
   font-size: 16px;
@@ -170,6 +174,15 @@ select:focus {
   cursor: pointer;
   box-shadow: 0 4px 12px rgba(50, 205, 50, 0.5);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.navigation button:disabled, .button:disabled {
+  background: rgba(50, 205, 50, 0.5);
+  cursor: not-allowed;
+}
+
+.independent{
+  width: 100%;
 }
 
 .navigation button:hover {
