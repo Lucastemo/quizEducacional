@@ -16,8 +16,6 @@
           <a href="/">Inicio</a>
           <a href="/loginUsuario">Login</a>
           <a href="/cadastrarUsuario">Cadastro</a>
-          <a href="/telaQuiz">Quiz</a>
-          <a href="/ranking">Ranking</a>
       </div>
     </div>
     <div class="links">
@@ -62,6 +60,15 @@
 
   const JWT = getCookie("JWT");
   if(JWT){
+          const atalhoQuiz = document.createElement("a");
+          atalhoQuiz.href = "/telaQuiz";
+          atalhoQuiz.text = "Quiz";
+          const atalhoRanking = document.createElement("a");
+          atalhoRanking.href = "/ranking";
+          atalhoRanking.text = "Ranking";
+          document.getElementsByClassName("menu-dropdown")[0].appendChild(atalhoQuiz);
+          document.getElementsByClassName("menu-dropdown")[0].appendChild(atalhoRanking);
+          
     const nome = getCookie("nomeUsuario");
           const tipo = getCookie("tipoUsuario");
           document.getElementById("user-status").text = nome;
