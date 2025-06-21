@@ -151,9 +151,16 @@ const usuarioController = {
                 const usuariosAbaixo = await usuarioModel.buscarUsuariosAbaixoDePontos(pontos, 10, id);
                 rankingIds = [id, ...usuariosAbaixo];
             } else {
-                const idAcima = await usuarioModel.buscarUsuarioAcimaDePontos(pontos);
                 const usuariosAbaixo = await usuarioModel.buscarUsuariosAbaixoDePontos(pontos, 9, id);
-                rankingIds = [idAcima, id, ...usuariosAbaixo];
+                if (usuariosAbaixo.length === 8) {
+                    const idAcima = await usuarioModel.buscarUsuariosAcimaDePontos(pontos);
+                    rankingIds = [idAcima[0], id, ...usuariosAbaixo];
+                } else {
+                    const quantidade = 9 - usuariosAbaixo.length;
+                    const idsAcima = await usuarioModel.buscarUsuariosAcimaDePontos(pontos, quantidade);
+                    idsAcima.reverse();
+                    rankingIds = [...idsAcima, id, ...usuariosAbaixo];
+                }
             }
             // Retorna o ranking com os IDs
             // Agora busca os dados completos de cada usuário do ranking
@@ -162,7 +169,6 @@ const usuarioController = {
                 const usuarioInfo = await usuarioModel.buscarUsuario(userId);
                 if (usuarioInfo && usuarioInfo.length > 0) {
                     const posicao = await usuarioModel.buscarPosicaoDeUsuarioNoRanking(userId);
-                    console.log('Posição do usuário:', posicao);
                     rankingUsuarios.push({
                         nome: usuarioInfo[0].NOME,
                         pontos: usuarioInfo[0].PONTOS,

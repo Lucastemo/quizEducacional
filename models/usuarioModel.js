@@ -57,14 +57,13 @@ const usuarioModel =  {
             throw error;
         }
     },
-    buscarUsuarioAcimaDePontos: async (pontos) => {
+    buscarUsuariosAcimaDePontos: async (pontos, quantidade = 1) => {
         try {
-            // Primeiro, chama a procedure para definir a variável de saída
-            await db.query('CALL buscar_usuario_acima_da_pontuacao(?, @usuario_id)', [pontos]);
-            // Depois, faz um SELECT para obter o valor da variável
-            const [rows] = await db.query('SELECT @usuario_id as usuario_id');
-            const usuarioId = rows[0]?.usuario_id;
-            return usuarioId;
+            // A procedure agora retorna um SELECT com vários ids
+            const [resultSets] = await db.query('CALL buscar_usuarios_acima_da_pontuacao(?, ?)', [pontos, quantidade]);
+            // O resultado do SELECT está em resultSets[0]
+            const ids = resultSets[0].map(row => row.id);
+            return ids;
         } catch (error) {
             console.error('Erro ao buscar usuários acima da pontuação', error);
             throw error;

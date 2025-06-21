@@ -52,17 +52,16 @@ END //
 DELIMITER ;
 DELIMITER //
 
-CREATE PROCEDURE buscar_usuario_acima_da_pontuacao(
+CREATE PROCEDURE buscar_usuarios_acima_da_pontuacao(
     IN pontuacao_limite INT,
-    OUT usuario_id INT
+    IN quantidade INT
 )
 BEGIN
     SELECT id
-    INTO usuario_id
     FROM Usuario
     WHERE pontos > pontuacao_limite
     ORDER BY pontos ASC
-    LIMIT 1;
+    LIMIT quantidade;
 END //
 
 DELIMITER ;
