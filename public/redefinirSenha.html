@@ -50,8 +50,12 @@
             <a href="./login.html">Voltar ao login</a>
         </div>
 </body>
-
+<script src="/javascript/cookies.js"></script>
 <script>
+    const JWT = getCookie("JWT");
+    if (JWT) {
+        window.location.href = "loginUsuario";
+    }
 
     document.getElementById("forgot-form").addEventListener("submit", async function(event) {
         event.preventDefault();
