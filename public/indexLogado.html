@@ -42,18 +42,12 @@
                 <h2>Vamos começar?</h2>
 
                 <br>
-
-
-                <!-- <p>Primeiro, faça seu <a href="cadastrarUsuario">Cadastro</a> caso não tiver uma conta</p>
-                <p>Ou faça <a href="loginUsuario">Login</a> se você já for cadastrado.</p> -->
                 
+                <div id="botoes">
+                    <button class="button btn-quiz" onclick="irParaQuiz()">Ir para o Quiz!!!</button>
+                    <button class="button btn-quiz" onclick="irParaRanking()">Ver Ranking</button>
+                </div>
 
-                <button class="btn-quiz" onclick="irParaQuiz()"> Ir para o Quiz!!!</button>
-
-
-
-
-                <br><br><br>
                 <br><br>
 
                 <h3>Sobre</h3>
@@ -84,8 +78,20 @@
         })
         document.getElementsByClassName("user-dropdown")[0].appendChild(deslogar);
         document.getElementsByClassName("nomePlayer")[0].textContent = nome;
+        if(tipo === "Administrador") {
+            const AdministrarCursosButton = document.createElement("button");
+            AdministrarCursosButton.textContent = "Administrar Cursos";
+            AdministrarCursosButton.className = "button btn-quiz";
+            AdministrarCursosButton.addEventListener("click", () => {
+                window.location.href = "/cadastrarCurso";
+            });
+            document.getElementById("botoes").appendChild(AdministrarCursosButton);
+        }
         irParaQuiz = () => {
             window.location.href = '/telaQuiz';
+        }
+        irParaRanking = () => {
+            window.location.href = '/ranking';
         }
     </script>
 </body>
