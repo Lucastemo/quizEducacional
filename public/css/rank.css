@@ -79,12 +79,13 @@ td {
     color: #fff;
     border: none;
     border-radius: 12px;
-    font-size: 1rem;
+    font-size: 1.3rem;
     font-weight: bold;
     cursor: pointer;
     transition: transform 0.2s, box-shadow 0.2s;
     padding: 8px;
     text-decoration: none;
+    margin: 10px 0;
 }
 
 .btn:hover {
