@@ -130,5 +130,52 @@ const usuarioController = {
             return res.status(500).json({ error: 'Erro interno ao adicionar pontos.' });
         }
     },
+
+    buscarRanking: async (req, res) => {
+        try {
+            const id = req.userId.userId;
+            const usuario = await usuarioModel.buscarUsuario(id);
+
+            if (!usuario || usuario.length === 0) {
+                return res.status(404).json({ error: 'Usuário não encontrado.' });
+            }
+
+            const pontos = usuario[0].PONTOS || 0;
+
+            const usuarioMaiorPontuacao = await usuarioModel.buscarUsuarioMaiorPontuacao();
+            const idMaiorPontuacao = usuarioMaiorPontuacao;
+
+            let rankingIds = [];
+
+            if (idMaiorPontuacao === id) {
+                const usuariosAbaixo = await usuarioModel.buscarUsuariosAbaixoDePontos(pontos, 10, id);
+                rankingIds = [id, ...usuariosAbaixo];
+            } else {
+                const idAcima = await usuarioModel.buscarUsuarioAcimaDePontos(pontos);
+                const usuariosAbaixo = await usuarioModel.buscarUsuariosAbaixoDePontos(pontos, 9, id);
+                rankingIds = [idAcima, id, ...usuariosAbaixo];
+            }
+            // Retorna o ranking com os IDs
+            // Agora busca os dados completos de cada usuário do ranking
+            const rankingUsuarios = [];
+            for (const userId of rankingIds) {
+                const usuarioInfo = await usuarioModel.buscarUsuario(userId);
+                if (usuarioInfo && usuarioInfo.length > 0) {
+                    const posicao = await usuarioModel.buscarPosicaoDeUsuarioNoRanking(userId);
+                    console.log('Posição do usuário:', posicao);
+                    rankingUsuarios.push({
+                        nome: usuarioInfo[0].NOME,
+                        pontos: usuarioInfo[0].PONTOS,
+                        rank: posicao
+                    });
+                }
+            }
+
+            return res.status(200).json({ ranking: rankingIds, rankingUsuarios });
+        } catch (error) {
+            console.error('Erro ao buscar ranking:', error);
+            return res.status(500).json({ error: 'Erro interno ao buscar ranking.' });
+        }
+    },
 }
 module.exports = usuarioController;

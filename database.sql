@@ -69,13 +69,11 @@ DELIMITER ;
 DELIMITER //
 
 CREATE PROCEDURE buscar_usuarios_abaixo_da_pontuacao(
-    OUT usuario_id INT,
     IN pontuacao_limite INT,
     IN quantidade INT
 )
 BEGIN
     SELECT id
-    INTO usuario_id
     FROM Usuario
     WHERE pontos <= pontuacao_limite
     ORDER BY pontos DESC
@@ -114,6 +112,20 @@ END //
 
 DELIMITER ;
 
+DELIMITER //
+
+CREATE PROCEDURE buscar_posicao_no_ranking_por_id_usuario(
+    IN p_id INT
+)
+BEGIN
+    SELECT posicao FROM (
+        SELECT RANK() OVER (ORDER BY PONTOS DESC) AS posicao, ID
+        FROM USUARIO
+    ) AS ranking
+    WHERE ID = p_id;
+END //
+
+DELIMITER ;
 
 
 

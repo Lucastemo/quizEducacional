@@ -79,31 +79,43 @@
             </tbody>
         </table>
 <br>
-        <a href="inicio.html" class="btn">Voltar ao Início</a>
+        <button onclick="window.location.href='/'" class="btn">Voltar ao Início</button>
 
     </div>
-
+    <script src="/javascript/cookies.js"></script>
     <script>
+        const JWT = getCookie("JWT");
 
-
+        
 
 // imagino q seja isso
 // só nao achei a rota pra puxar os dados do ranking
-        fetch('/api/ranking')
-            .then(response => response.json())
-            .then(data => {
+        fetch('/api/usuario/ranking', {
+            method: 'GET',
+            headers: {
+            'x-access-token': JWT
+            }
+        })
+        .then(async resposta => {
+            const data = await resposta.json();
+            if (resposta.ok && data.rankingUsuarios) {
                 const tbody = document.querySelector('tbody');
                 tbody.innerHTML = '';
 
-                data.forEach((jogador, index) => {
+                const nomeUsuarioAtual = getCookie("nomeUsuario");
+
+                data.rankingUsuarios.forEach((jogador, index) => {
+                    const isAtual = jogador.nome === nomeUsuarioAtual;
+                    const style = isAtual ? ' style="background-color: #666;"' : '';
                     const row = document.createElement('tr');
                     row.innerHTML = `
-                        <td>${jogador.nome}</td>
-                        <td>${jogador.pontuacao}</td>
-                        <td>${index + 1}</td>
+                        <td${style}>${jogador.nome}</td>
+                        <td${style}>${jogador.pontos}</td>
+                        <td${style}>${jogador.rank}</td>
                     `;
                     tbody.appendChild(row);
                 });
+            }
             });
     </script>
 </body>

@@ -68,6 +68,7 @@ app.get('/esqueci', (req, res) => {
 // ROTAS BACK-END
 
 // Rotas Usuario
+app.get('/api/usuario/ranking', usuarioController.verificarToken, usuarioController.buscarRanking);
 app.post('/api/login', usuarioController.validarLogin);
 app.post('/api/usuario', usuarioController.cadastrarUsuario);
 app.post('/api/usuario/pontos', usuarioController.verificarToken, usuarioController.adicionarPontos);
