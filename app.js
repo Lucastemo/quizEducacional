@@ -40,6 +40,11 @@ app.get('/telaQuiz/:id_disciplina', usuarioController.colocarJWTNoHeader, usuari
     res.sendFile(path.join(__dirname, 'public', 'telaQuiz.html'));
 })
 //-----------------------------------------------------------------
+
+app.get('/ranking', usuarioController.colocarJWTNoHeader, usuarioController.verificarToken, (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'ranking.html'));
+})
+
 app.get('/cadastrarUsuario', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'registro.html'));
 })
