@@ -126,6 +126,19 @@ END //
 
 DELIMITER ;
 
+DELIMITER //
+
+CREATE PROCEDURE atualizar_senha_usuario_por_email(
+    IN p_email VARCHAR(300),
+    IN p_nova_senha VARCHAR(255)
+)
+BEGIN
+    UPDATE USUARIO
+    SET SENHA = p_nova_senha
+    WHERE EMAIL = p_email;
+END //
+
+DELIMITER ;
 
 
 CREATE TABLE IF NOT EXISTS CURSO(

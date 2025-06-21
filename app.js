@@ -65,6 +65,10 @@ app.get('/esqueci', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'esqueci.html'));
 })
 
+app.get('/redefinirSenha', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'redefinirSenha.html'));
+})
+
 // ROTAS BACK-END
 
 // Rotas Usuario
@@ -72,6 +76,8 @@ app.get('/api/usuario/ranking', usuarioController.verificarToken, usuarioControl
 app.post('/api/login', usuarioController.validarLogin);
 app.post('/api/usuario', usuarioController.cadastrarUsuario);
 app.post('/api/usuario/pontos', usuarioController.verificarToken, usuarioController.adicionarPontos);
+app.post('/api/usuario/esqueci-senha', usuarioController.enviarEmailRecuperacao);
+app.post('/api/usuario/redefinir-senha', usuarioController.alterarSenhaComToken);
 
 // ROTAS PARA cursoController
 app.get('/api/curso', cursoController.consultaRegistro);

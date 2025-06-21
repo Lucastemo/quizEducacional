@@ -36,15 +36,15 @@
         <form id="forgot-form">
             <div class="form-group">
                 <label for="token-pass">Insira o token:</label>
-                <input id="new-pass" required  />
+                <input id="token-pass" required />
 
                 <label for="new-pass">Insira a nova senha:</label>
-                <input id="new-pass" required  />
+                <input id="new-pass" type="password" required />
 
                 <label for="rep-pass">Repita a nova Senha:</label>
-                <input id="rep-pass" required  />
+                <input id="rep-pass" type="password" required />
             </div>
-            <button type="submit" class="btn" id="btnRoute" onclick="">Trocar Senha</button>
+            <button type="submit" class="btn" id="btnRoute">Trocar Senha</button>
         </form>
         <div class="links">
             <a href="./login.html">Voltar ao login</a>
@@ -53,17 +53,42 @@
 
 <script>
 
-    document.getElementById("forgot-form").addEventListener("submit", function(event) {
+    document.getElementById("forgot-form").addEventListener("submit", async function(event) {
         event.preventDefault();
 
+        // Pega o e-mail da query string
+        const params = new URLSearchParams(window.location.search);
+        const email = params.get('email');
+        const token = document.getElementById('token-pass').value;
         const senha = document.getElementById('new-pass').value;
         const repSenha = document.getElementById('rep-pass').value;
 
-        if(senha != repSenha) {
-            alert("as senhas não coincidem");
+        if (!email) {
+            alert("E-mail não encontrado. Volte e solicite novamente a recuperação.");
+            window.location.href = "/esqueci";
+            return;
         }
-        else if(senha == repSenha) {
-            alert("as senhas são iguais");
+
+        if (senha !== repSenha) {
+            alert("As senhas não coincidem");
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/usuario/redefinir-senha', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, token, novaSenha: senha })
+            });
+            const data = await response.json();
+            if (response.ok) {
+                alert("Senha alterada com sucesso!");
+                window.location.href = "/loginUsuario";
+            } else {
+                alert(data.error || "Erro ao redefinir senha.");
+            }
+        } catch (err) {
+            alert("Erro ao conectar ao servidor.");
         }
     });
 

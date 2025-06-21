@@ -54,19 +54,31 @@
         return regex.test(email); 
     }
 
-    document.getElementById("forgot-form").addEventListener("submit", function(event) {
+    document.getElementById("forgot-form").addEventListener("submit", async function(event) {
         event.preventDefault();
 
         const emailForgot = document.getElementById('email-forgot').value;
 
         if(validarEmail(emailForgot)) {
-            alert("token enviado para seu email!")
-            
-            // Troca de página
-            window.location.href = "./redefinirSenha.html";
+            try {
+                const response = await fetch('/api/usuario/esqueci-senha', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: emailForgot })
+                });
+                const data = await response.json();
+                if (response.ok) {
+                    alert("Token enviado para seu email!");
+                    window.location.href = "./redefinirSenha?email=" + encodeURIComponent(emailForgot);
+                } else {
+                    alert(data.error || "Erro ao enviar e-mail.");
+                }
+            } catch (err) {
+                alert("Erro ao conectar ao servidor.");
+            }
         }
         else {
-            alert("E-mail inválido")
+            alert("E-mail inválido");
         }
     }) 
     

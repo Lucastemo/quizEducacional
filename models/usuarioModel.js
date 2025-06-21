@@ -93,6 +93,15 @@ const usuarioModel =  {
             throw error;
         }
     },
+    alterarSenha: async (email, novaSenha) => {
+        try {
+            await db.execute('CALL atualizar_senha_usuario_por_email(?, ?)', [email, novaSenha]);
+            return true;
+        } catch (error) {
+            console.error('Erro ao alterar senha do usuário', error);
+            throw error;
+        }
+    },
 };
 
 module.exports = usuarioModel;

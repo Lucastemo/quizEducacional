@@ -1,6 +1,10 @@
+require('dotenv').config();
 const usuarioModel = require('../models/usuarioModel.js'); // inserir diretorio do model
 const jwt = require('jsonwebtoken'); 
+const nodemailer = require('nodemailer');
+const crypto = require('crypto');
 const SECRET = "palavraSecreta"
+const tokensRecuperacao = {};
 
 const usuarioController = {
 
@@ -181,6 +185,65 @@ const usuarioController = {
         } catch (error) {
             console.error('Erro ao buscar ranking:', error);
             return res.status(500).json({ error: 'Erro interno ao buscar ranking.' });
+        }
+    },
+
+    enviarEmailRecuperacao: async (req, res) => {
+        const { email } = req.body;
+        try {
+            const usuario = await usuarioModel.verificarUsuario(email);
+            if (!usuario || usuario.length === 0) {
+                return res.status(404).json({ error: 'E-mail não cadastrado.' });
+            }
+
+            // Gera token aleatório
+            const token = crypto.randomBytes(4).toString('hex'); // 8 caracteres
+            const expires = Date.now() + 15 * 60 * 1000; // 15 minutos
+
+            tokensRecuperacao[email] = { token, expires };
+
+            let transporter = nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                    user: process.env.EMAIL_APP,
+                    pass: process.env.EMAIL_APP_PASSWORD,
+                },
+            });
+
+            let mailOptions = {
+                from: `"Quiz Educacional" <${process.env.EMAIL_APP}>`,
+                to: email,
+                subject: 'Quiz Educacional - Recuperação de Senha',
+                text: `Seu código de recuperação é: ${token}`,
+            };
+
+            await transporter.sendMail(mailOptions);
+
+            return res.status(200).json({ message: 'Token enviado para seu email!' });
+        } catch (error) {
+            console.error('Erro ao enviar e-mail de recuperação:', error);
+            return res.status(500).json({ error: 'Erro ao enviar e-mail.' });
+        }
+    },
+
+    alterarSenhaComToken: async (req, res) => {
+        const { email, token, novaSenha } = req.body;
+        try {
+            const registro = tokensRecuperacao[email];
+            if (!registro || registro.token !== token || Date.now() > registro.expires) {
+                return res.status(400).json({ error: 'Token inválido ou expirado.' });
+            }
+
+            // Altere a senha no banco
+            await usuarioModel.alterarSenha(email, novaSenha);
+
+            // Remove o token usado
+            delete tokensRecuperacao[email];
+
+            return res.status(200).json({ message: 'Senha alterada com sucesso!' });
+        } catch (error) {
+            console.error('Erro ao alterar senha:', error);
+            return res.status(500).json({ error: 'Erro ao alterar senha.' });
         }
     },
 }
