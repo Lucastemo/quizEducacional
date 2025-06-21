@@ -94,6 +94,38 @@
       senha: senha,
     };
 
+    fazerLogin = async (login, senha) => {
+      try {
+        const response = await fetch('/api/login', {
+          method: 'POST', 
+          headers: { 
+            'Content-Type': 'application/json' 
+          },
+          body: JSON.stringify({ email: login, senha }) 
+        });
+
+        const data = await response.json();
+        if (!response.ok) {
+          alert('Login ou senha inválidos!');
+          return;
+        }
+
+        deleteCookie("JWT");
+        deleteCookie("nomeUsuario");
+        deleteCookie("tipoUsuario");
+
+        setCookie("JWT", data.token);
+        setCookie("nomeUsuario", data.nome);
+        setCookie("tipoUsuario", data.tipo == "user" ? "Jogador" : "Administrador");
+        
+        location.href = "/";
+
+      } catch (error) {
+        console.error('Erro ao enviar dados:', error);
+        alert('Erro de comunicação com o servidor');
+      }
+    }
+
     try {
      
       const response = await fetch(url, {
@@ -108,8 +140,8 @@
       if (response.ok) {
         const data = await response.json();
         console.log('Usuário registrado com sucesso:', data);
-        alert('Registro bem-sucedido! Agora você pode fazer login.');
-        window.location.href = '/login';
+        alert('Registro bem-sucedido!');
+        await fazerLogin(email, senha); // Chama a função de login após o registro
       } else {
         const errorData = await response.json();
         console.log('Erro no registro:', errorData);
