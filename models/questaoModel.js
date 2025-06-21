@@ -65,7 +65,23 @@ const questaoModel = {
        console.error('Error ao buscar disciplina', error);
       throw error('Error ao buscar disciplina');
     }
-  }
+  },
+
+  consultaPorId: async (id) => {
+    try {
+      if (!id) {
+        throw new Error('ID da questão é obrigatório!');
+      }
+      const sql = 'CALL consultar_questao_por_id(?)';
+      const [rows] = await db.query(sql, [id]);
+      return rows[0];
+    } catch (error) {
+      console.error('Error ao buscar questão por ID', error);
+      throw new Error('Erro ao buscar questão por ID');
+    }
+  },
 };
+
+
 
 module.exports = questaoModel;

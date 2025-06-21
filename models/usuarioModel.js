@@ -35,6 +35,15 @@ const usuarioModel =  {
         } catch (error) {
             console.error('Error ao buscar Usuario', error);
         }
+    },
+    alterarPontosUsuario: async (id, pontos) => {
+        try {
+            await db.execute('CALL alterar_pontos_por_id_usuario(?, ?)', [id, pontos]);
+            return true;
+        } catch (error) {
+            console.error('Erro ao alterar pontos do usuário', error);
+            throw error;
+        }
     }
 };
 

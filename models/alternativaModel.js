@@ -73,6 +73,20 @@ const alternativaModel = {
          }
        },
 
+    consultaPorId: async (id) => {
+        try {
+            if (!id) {
+                throw new Error('ID é obrigatório!');
+            }
+            const sql = 'CALL consultar_alternativa_por_id(?)';
+            const [rows] = await db.query(sql, [id]);
+            return rows[0];
+        } catch (error) {
+            console.error('Erro ao buscar alternativa por ID', error);
+            throw new Error('Erro ao buscar alternativa por ID');
+        }
+    },
+
     verificarResposta: async (id)=> {
         try {
             if (!id) {

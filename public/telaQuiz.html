@@ -60,6 +60,7 @@
   let todasPerguntas = {};  // Todas as perguntas por matéria
 let perguntas = [];       // Perguntas da matéria selecionada
 let respostasUsuario = {};
+let alternativasSelecionadas = [];
 let perguntaAtual = 0;
 
 const url = window.location.href;
@@ -195,30 +196,29 @@ async function iniciarQuiz(){
       const alternativas = {};
 
       alternativasArray.forEach((alt, idx) => {
-        alternativas[letras[idx]] = alt.TEXTO;
+        alternativas[letras[idx]] = [alt.TEXTO, alt.ID];
         if (alt.CORRETA) {
-        alternativaCorreta = letras[idx];
+          alternativaCorreta = letras[idx];
         }
       });
       alternativas.alternativaCorreta = alternativaCorreta;
-        perguntas.push({
-          id: questao.ID,
-          texto: questao.ENUNCIADO,
-          alternativas: {
-            A: alternativas.A,
-            B: alternativas.B,
-            C: alternativas.C,
-            D: alternativas.D,
-          },
-          resposta_correta: alternativas.alternativaCorreta
-        });
-    };
+      perguntas.push({
+        id: questao.ID,
+        texto: questao.ENUNCIADO,
+        alternativas: {
+          A: alternativas.A,
+          B: alternativas.B,
+          C: alternativas.C,
+          D: alternativas.D,
+        },
+        resposta_correta: alternativas.alternativaCorreta
+      });
     
     document.getElementById("selecaoCurso").style.display = "none";
     const navigation = document.getElementsByClassName("navigation")[0];
     navigation.classList.remove("notVisible");
-    console.log(`AQUI: ${JSON.stringify(perguntas)}`);
     carregarPerguntasMateria();
+}
 }
 
 // Quando seleciona a matéria, carrega perguntas e reseta estado
@@ -247,7 +247,6 @@ function habilitarProximo() {
 function exibirPerguntas() {
   const container = document.getElementById('containerPerguntas');
   container.innerHTML = '';
-  console.log(JSON.stringify(perguntas));
   
   perguntas.forEach((pergunta, index) => {
     const div = document.createElement('div');
@@ -256,10 +255,10 @@ function exibirPerguntas() {
     div.style.display = 'none';
 
     const htmlAlternativas = Object.entries(pergunta.alternativas)
-      .map(([letra, texto]) => `
+      .map(([letra, arr]) => `
         <label>
-          <input type="radio" name="resposta${index}" id="alternativa${letra}" value="${letra}" onchange="salvarResposta(${index}, '${letra}'); habilitarProximo()">
-          ${letra}) ${texto}
+          <input type="radio" name="resposta${index}" id="alternativa${letra}" value="${letra}" onchange="salvarResposta(${index}, '${letra}', ${arr[1]}); habilitarProximo()">
+          ${letra}) ${arr[0]}
         </label><br>
       `).join('');
 
@@ -273,8 +272,9 @@ function exibirPerguntas() {
 }
 
 // Salva resposta do usuário no objeto
-function salvarResposta(indicePergunta, letraSelecionada) {
+function salvarResposta(indicePergunta, letraSelecionada, idAlternativa) {
   respostasUsuario[indicePergunta] = letraSelecionada;
+  alternativasSelecionadas[indicePergunta] = idAlternativa;
 }
 
 // Mostra a pergunta atual (mostra só uma)
@@ -397,25 +397,56 @@ function finalizarQuiz() {
 
 // Envia os dados para servidor externo via POST
 async function enviarRankingUsuarioLogado(pontos) {
-    try {
-        const resposta = await fetch('/api/ranking', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            // O back-end deve identificar o usuário logado pela sessão ou token
-            body: JSON.stringify({ pontos: pontos })
-        });
-
-        if (resposta.ok) {
-            alert('Pontuação salva no ranking com sucesso!');
-        } else {
-            alert('Erro ao salvar no ranking. Tente novamente mais tarde.');
-        }
-    } catch (erro) {
-        console.error('Erro ao enviar ranking:', erro);
-        alert('Erro de conexão ao salvar ranking.');
+  try {
+    console.log("ALTERNATIVAS SELECIONADAS ---> " + alternativasSelecionadas);
+    const resposta = await fetch('/api/alternativa/respostas', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-access-token': JWT
+      },
+      body: JSON.stringify({ respostas: alternativasSelecionadas })
+    });
+    const data = await resposta.json();
+    if (resposta.ok) {
+      const correcao = data.correcao;
+      console.log(correcao);
+      const totalPontos = correcao.reduce((acc, val) => acc + val, 0);
+      const respostaPontos = await fetch('/api/usuario/pontos', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-access-token': JWT
+      },
+      body: JSON.stringify({ pontos: totalPontos })
+      });
+      const dataPontos = await respostaPontos.json();
+      console.log("MENSAGEM: " + dataPontos.message);
+    } else {
+      console.error('Erro ao enviar respostas para correção:', data);
     }
+  } catch (erro) {
+    console.error('Erro ao enviar respostas para correção:', erro);
+  }
+    // try {
+    //     const resposta = await fetch('/api/ranking', {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json'
+    //         },
+    //         // O back-end deve identificar o usuário logado pela sessão ou token
+    //         body: JSON.stringify({ pontos: pontos })
+    //     });
+
+    //     if (resposta.ok) {
+    //         alert('Pontuação salva no ranking com sucesso!');
+    //     } else {
+    //         alert('Erro ao salvar no ranking. Tente novamente mais tarde.');
+    //     }
+    // } catch (erro) {
+    //     console.error('Erro ao enviar ranking:', erro);
+    //     alert('Erro de conexão ao salvar ranking.');
+    // }
 }
 
 if(parseInt(id_disciplina)){

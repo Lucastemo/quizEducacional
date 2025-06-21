@@ -98,6 +98,37 @@ const usuarioController = {
                 return res.status(401).json({auth: false, message: 'Usuário não autorizado.'});
             }
          next();
-    }
+    },
+
+    adicionarPontos: async (req, res) => {
+        try {
+            const id = req.userId.userId;
+            const { pontos } = req.body;
+
+            if (typeof pontos !== 'number') {
+                return res.status(400).json({ error: 'O campo pontos deve ser um número.' });
+            }
+
+            const usuario = await usuarioModel.buscarUsuario(id);
+
+            if (!usuario || usuario.length === 0) {
+                return res.status(404).json({ error: 'Usuário não encontrado.' });
+            }
+
+            const pontosAtuais = usuario[0].PONTOS || 0;
+            const novosPontos = pontosAtuais + pontos;
+
+            const resultado = await usuarioModel.alterarPontosUsuario(id, novosPontos);
+
+            if (resultado) {
+                return res.status(200).json({ message: 'Pontos atualizados com sucesso.', pontos: novosPontos });
+            } else {
+                return res.status(500).json({ error: 'Erro ao atualizar pontos do usuário.' });
+            }
+        } catch (error) {
+            console.error('Erro ao adicionar pontos:', error);
+            return res.status(500).json({ error: 'Erro interno ao adicionar pontos.' });
+        }
+    },
 }
 module.exports = usuarioController;

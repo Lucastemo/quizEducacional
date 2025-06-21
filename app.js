@@ -65,6 +65,7 @@ app.get('/esqueci', (req, res) => {
 // Rotas Usuario
 app.post('/api/login', usuarioController.validarLogin);
 app.post('/api/usuario', usuarioController.cadastrarUsuario);
+app.post('/api/usuario/pontos', usuarioController.verificarToken, usuarioController.adicionarPontos);
 
 // ROTAS PARA cursoController
 app.get('/api/curso', cursoController.consultaRegistro);
@@ -86,6 +87,7 @@ app.delete('/api/questao/:id', usuarioController.verificarToken, usuarioControll
 
 // ROTAS PARA alternativaController
 app.get('/api/alternativa/:id_questao', usuarioController.verificarToken, alternativaController.consultarAlternativa);
+app.post('/api/alternativa/respostas', usuarioController.verificarToken, alternativaController.verificarRespostas);
 app.post('/api/alternativa', usuarioController.verificarToken, usuarioController.verificarAdmin, alternativaController.cadastrarAlternativa);
 app.put('/api/alternativa', usuarioController.verificarToken, usuarioController.verificarAdmin, alternativaController.editarAlternativa);
 app.delete('/api/alternativa/:id', usuarioController.verificarToken, usuarioController.verificarAdmin, alternativaController.excluirAlternativa);

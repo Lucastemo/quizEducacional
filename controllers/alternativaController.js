@@ -1,4 +1,5 @@
 const alternativaModel = require('../models/alternativaModel');
+const questaoModel = require('../models/questaoModel');
 
 const alternativaController = {
 
@@ -97,6 +98,51 @@ const alternativaController = {
             console.error('Erro ao consultar alternativas por questão: ', error);
             return res.status(500).json({
                 error: 'Erro interno ao consultar alternativas.'
+            });
+        }
+    },
+
+    verificarRespostas: async (req, res) => {
+        const { respostas } = req.body;
+        if (!Array.isArray(respostas)) {
+            return res.status(400).json({
+                error: 'O campo respostas deve ser um array de IDs.'
+            });
+        }
+
+        const correcao = [];
+
+        try {
+            for (const idAlternativa of respostas) {
+                const verificacaoResposta = await alternativaModel.verificarResposta(idAlternativa);
+                correta = verificacaoResposta[0].CORRETA;
+                if (correta === 1) {
+                    const alternativaBuscada = await alternativaModel.consultaPorId(idAlternativa);
+                    const alternativa = alternativaBuscada[0];
+                    if (!alternativa) {
+                        correcao.push(0);
+                        continue;
+                    }
+                    const questaoBuscada = await questaoModel.consultaPorId(alternativa.ID_QUESTAO);
+                    const questao = questaoBuscada[0];
+                    if (!questao || typeof questao.DIFICULDADE !== 'number') {
+                        correcao.push(0);
+                        continue;
+                    }
+                    correcao.push(5 * questao.DIFICULDADE);
+                } else {
+                    correcao.push(0);
+                }
+            }
+
+            return res.status(200).json({
+                message: 'Respostas verificadas com sucesso!',
+                correcao
+            });
+        } catch (error) {
+            console.error('Erro ao verificar respostas: ', error);
+            return res.status(500).json({
+                error: 'Erro interno ao verificar respostas.'
             });
         }
     }
