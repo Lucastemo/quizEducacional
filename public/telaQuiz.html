@@ -23,7 +23,7 @@
           <a href="/telaQuiz">Quiz</a>
           <a href="/ranking">Ranking</a>
         </div>
-        <h1>Tela do Quiz (protótipo)</h1>
+        <h1>Quiz Educacional</h1>
       </div>
     </div>
   </header>
@@ -399,7 +399,6 @@ function finalizarQuiz() {
 // Envia os dados para servidor externo via POST
 async function enviarRankingUsuarioLogado(pontos) {
   try {
-    console.log("ALTERNATIVAS SELECIONADAS ---> " + alternativasSelecionadas);
     const resposta = await fetch('/api/alternativa/respostas', {
       method: 'POST',
       headers: {
@@ -411,7 +410,6 @@ async function enviarRankingUsuarioLogado(pontos) {
     const data = await resposta.json();
     if (resposta.ok) {
       const correcao = data.correcao;
-      console.log(correcao);
       const totalPontos = correcao.reduce((acc, val) => acc + val, 0);
       const respostaPontos = await fetch('/api/usuario/pontos', {
       method: 'POST',
@@ -422,7 +420,12 @@ async function enviarRankingUsuarioLogado(pontos) {
       body: JSON.stringify({ pontos: totalPontos })
       });
       const dataPontos = await respostaPontos.json();
-      console.log("MENSAGEM: " + dataPontos.message);
+      if (respostaPontos.ok) {
+        window.location.href = "/ranking";
+      } else {
+        console.error('Erro ao salvar pontuação:', dataPontos);
+        alert('Erro ao salvar pontuação. Tente novamente mais tarde.');
+      }
     } else {
       console.error('Erro ao enviar respostas para correção:', data);
     }
