@@ -53,11 +53,11 @@ app.get('/loginUsuario', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'login.html'));
 })
 
-app.get('/cadastrarCurso', (req, res) => {
+app.get('/cadastrarCurso', usuarioController.colocarJWTNoHeader, usuarioController.verificarToken, usuarioController.verificarAdmin, (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'cadastrarCurso.html'));
 })
 
-app.get('/cadastrarQuestao/:id_curso/:id_disciplina', (req, res) => {
+app.get('/cadastrarQuestao/:id_curso/:id_disciplina', usuarioController.colocarJWTNoHeader, usuarioController.verificarToken, usuarioController.verificarAdmin, (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'cadastrarQuestoes.html'));
 })
 
