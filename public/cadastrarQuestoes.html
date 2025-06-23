@@ -14,6 +14,11 @@
       <select id="disciplina" name="disciplina" required>
         <option value="">Selecione uma disciplina</option>
       </select>
+      
+      <label for="perguntas">Perguntas:</label>
+      <select id="perguntas" name="perguntas" required>
+        <option value="-1" selected="true">Criar nova questão</option>
+      </select>
 
       <label for="pergunta">Pergunta:</label>
       <textarea id="pergunta" name="pergunta" rows="3" required></textarea>
@@ -48,25 +53,147 @@
       <button type="submit" class="btn-questao">Cadastrar Questão</button>
     </form>
   </div>
-
+<script src="/javascript/cookies.js"></script>
   <script>
 
+  const JWT = getCookie("JWT");
     //script ainda nao foi testado!!
+
+    // Extrai idCurso e idDisciplina da URL, considerando o formato .../idCurso/idDisciplina
+    const pathParts = window.location.pathname.split("/").filter(Boolean);
+    let idDisciplina = pathParts[pathParts.length - 1];
+    const idCurso = pathParts[pathParts.length - 2];
 
     document.addEventListener("DOMContentLoaded", () => {
       // Carregar disciplinas do backend
-      fetch("/api/questao/:id_disciplina")
+      fetch(`/api/disciplina/${idCurso}`, {
+        method: "GET",
+        headers: {
+          "x-access-token": JWT
+        }
+      })
         .then(res => res.json())
-        .then(disciplinas => {
+        .then(result => {
+          const disciplinas = result.data;
           const select = document.getElementById("disciplina");
           disciplinas.forEach(d => {
-            const opt = document.createElement("option");
-            opt.value = d.id;
-            opt.textContent = d.nome;
-            select.appendChild(opt);
+        const opt = document.createElement("option");
+        opt.value = d.ID;
+        opt.textContent = d.NOME;
+        select.appendChild(opt);
           });
+          if (idDisciplina) {
+            const optionToSelect = Array.from(select.options).find(opt => opt.value === idDisciplina);
+            if (optionToSelect) {
+              optionToSelect.selected = true;
+            }
+          }
         })
         .catch(err => console.error("Erro ao carregar disciplinas:", err));
+
+        // Limpar campos do formulário
+        function limparCampos() {
+          document.getElementById("pergunta").value = "";
+          document.querySelectorAll('input[name="resposta[]"]').forEach(input => input.value = "");
+          document.querySelectorAll('input[name="resposta_correta"]').forEach(radio => radio.checked = false);
+          document.querySelectorAll('input[name="dificuldade"]').forEach(radio => radio.checked = false);
+          document.querySelectorAll('input[name="resposta[]"]').forEach(input => input.style.backgroundColor = "white");
+      }
+
+        // Carregar questões existentes para o select "perguntas"
+        function carregarQuestoes(){
+          limparCampos();
+          const selectPerguntas = document.getElementById("perguntas");
+          selectPerguntas.innerHTML = "";
+          const optDefault = document.createElement("option");
+          optDefault.value = "-1";
+          optDefault.selected = true;
+          optDefault.textContent = "Criar nova questão";
+          selectPerguntas.appendChild(optDefault);
+          fetch(`/api/questao/todas/${idDisciplina}`, {
+            method: "GET",
+            headers: {
+              "x-access-token": JWT
+            }
+          })
+            .then(res => res.json())
+            .then(result => {
+              const perguntas = result.data;
+              const selectPerguntas = document.getElementById("perguntas");
+              perguntas.forEach(q => {
+            const opt = document.createElement("option");
+            opt.value = q.ID;
+            opt.textContent = q.ENUNCIADO;
+            selectPerguntas.appendChild(opt);
+              });
+            })
+            .catch(err => console.error("Erro ao carregar perguntas:", err));
+        }
+        carregarQuestoes();
+
+        document.getElementById("disciplina").addEventListener("change", function() {
+          idDisciplina = this.value;
+          carregarQuestoes();
+        });
+
+          document.getElementById("perguntas").addEventListener("change", function() {
+            const selectedId = this.value;
+            if (selectedId === "-1") {
+              limparCampos();
+              return;
+            }
+            fetch(`/api/questao/especifica/${selectedId}`, {
+              method: "GET",
+              headers: {
+                "x-access-token": JWT
+              }
+            })
+              .then(res => res.json())
+              .then(result => {
+                const questao = result.data[0];
+                document.getElementById("pergunta").value = questao.ENUNCIADO || "";
+
+                // Buscar alternativas da questão selecionada
+                fetch(`/api/alternativa/${selectedId}`, {
+                  method: "GET",
+                  headers: {
+                  "x-access-token": JWT
+                  }
+                })
+                  .then(res => res.json())
+                  .then(altResult => {
+                    const alternativas = altResult.data || [];
+                    alternativas.forEach((alt, i) => {
+                      const input = document.querySelectorAll('input[name="resposta[]"]')[i];
+                      if (input) input.value = alt.TEXTO || "";
+                    });
+                    let indexRadioCorreto = -1;
+                    document.querySelectorAll('input[name="resposta_correta"]').forEach((radio, i) => {
+                      radio.checked = i === alternativas.findIndex(a => a.CORRETA);
+                      radio.value = alternativas[i] ? alternativas[i].ID : "";
+                      if (radio.checked) {
+                        indexRadioCorreto = i;
+                      }
+                    });
+                    const inputsText = document.querySelectorAll('input[name="resposta[]"]');
+                    inputsText.forEach((input, i) => {
+                      input.style.backgroundColor = "white";
+                    });
+                    inputsText[indexRadioCorreto].style.backgroundColor = "lightgreen";
+                  })
+
+                  .catch(err => {
+                  console.error("Erro ao carregar alternativas:", err);
+                  });
+                document.querySelectorAll('input[name="dificuldade"]').forEach(radio => {
+                  radio.checked = radio.value == questao.DIFICULDADE;
+                });
+              })
+              .catch(err => {
+                console.error("Erro ao carregar questão:", err);
+                alert("Erro ao carregar questão selecionada.");
+              });
+          });
 
       //cor verde no input
       const radios = document.querySelectorAll('input[name="resposta_correta"]');

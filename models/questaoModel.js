@@ -80,6 +80,17 @@ const questaoModel = {
       throw new Error('Erro ao buscar questão por ID');
     }
   },
+
+  consultarTodasQuestoes: async (id_disciplina) => {
+    try {
+      const sql = 'CALL consultar_todas_questoes_por_id_disciplina(?)';
+      const [rows] = await db.query(sql,[id_disciplina]);
+      return rows[0];
+    } catch (error) {
+      console.error('Error ao consultar todas as questões', error);
+      throw new Error('Erro ao consultar todas as questões');
+    }
+  },
 };
 
 

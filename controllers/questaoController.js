@@ -113,6 +113,57 @@ const questaoController = {
                 error: 'Erro interno ao consultar questões.'
             });
         }
+    },
+
+    consultarTodasQuestoes: async (req, res) => {
+        try {
+            const { id_disciplina } = req.params;
+            if (!id_disciplina) {
+                return res.status(400).json({
+                    error: 'id_disciplina é obrigatório.'
+                });
+            }
+            const questoes = await questaoModel.consultarTodasQuestoes(id_disciplina);
+            return res.status(200).json({
+                message: 'Todas as questões encontradas com sucesso!',
+                data: questoes
+            });
+        } catch (error) {
+            console.error('Erro ao consultar todas as questões: ', error);
+            return res.status(500).json({
+                error: 'Erro interno ao consultar todas as questões.'
+            });
+        }
+    },
+
+    consultarQuestaoPorId: async (req, res) => {
+        const { id } = req.params;
+
+        try {
+            if (!id) {
+                return res.status(400).json({
+                    error: 'ID é obrigatório.'
+                });
+            }
+
+            const questao = await questaoModel.consultaPorId(id);
+
+            if (!questao) {
+                return res.status(404).json({
+                    error: 'Questão não encontrada.'
+                });
+            }
+
+            return res.status(200).json({
+                message: 'Questão encontrada com sucesso!',
+                data: questao
+            });
+        } catch (error) {
+            console.error('Erro ao consultar questão por ID: ', error);
+            return res.status(500).json({
+                error: 'Erro interno ao consultar questão por ID.'
+            });
+        }
     }
 };
 

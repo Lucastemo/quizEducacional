@@ -92,6 +92,8 @@ app.put('/api/disciplina/:id', disciplinaController.edicaoRegistro);
 app.delete('/api/disciplina/:id', disciplinaController.excluirRegistro);
 
 // ROTAS PARA questaoController
+app.get('/api/questao/especifica/:id', usuarioController.verificarToken, usuarioController.verificarAdmin, questaoController.consultarQuestaoPorId);
+app.get('/api/questao/todas/:id_disciplina', usuarioController.verificarToken, usuarioController.verificarAdmin, questaoController.consultarTodasQuestoes);
 app.get('/api/questao/:id_disciplina', usuarioController.verificarToken, questaoController.consultarQuestao);
 app.post('/api/questao', usuarioController.verificarToken, usuarioController.verificarAdmin ,questaoController.cadastrarQuestao);
 app.put('/api/questao', usuarioController.verificarToken, usuarioController.verificarAdmin, questaoController.editarQuestao);

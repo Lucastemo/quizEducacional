@@ -336,6 +336,18 @@ END //
 
 DELIMITER ;
 
+DELIMITER //
+
+CREATE PROCEDURE consultar_todas_questoes_por_id_disciplina(
+    IN p_id_disciplina INT
+)
+BEGIN
+    SELECT * FROM QUESTAO
+    WHERE ID_DISCIPLINA = p_id_disciplina;
+END //
+
+DELIMITER ;
+
 
 
 
