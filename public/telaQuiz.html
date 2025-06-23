@@ -109,13 +109,14 @@ async function popularSelectDisciplinas() {
   const botaoIniciarQuiz = document.getElementById("iniciarQuiz");
 
   select.value = "none";
+  botaoIniciarQuiz.style.display = "none";
 
   if(curso == "none"){
     select.style.display = "none";
-    botaoIniciarQuiz.style.display = "none";
     return;
   }else{
     select.style.display = "block";
+    select.innerHTML = '<option value="none">Selecione uma disciplina</option>';
   }
 
   try {
