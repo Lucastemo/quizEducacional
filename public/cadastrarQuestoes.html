@@ -4,9 +4,36 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Cadastrar Questão</title>
+  <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/cadastrarQuestoes.css">
 </head>
 <body>
+  <div class="navbar">
+        <div class="quiz-menu">
+            <span>Quiz ▾</span>
+            <div class="menu-dropdown">
+                <a href="/">Inicio</a>
+                <a href="/loginUsuario">Login</a>
+                <a href="/cadastrarUsuario">Cadastro</a>
+                <a href="/telaQuiz">Quiz</a>
+                <a href="/ranking">Ranking</a>
+            </div>
+        </div>
+        <div class="links">
+            <a href="/">Início</a>
+        </div>
+        <div class="user-info">
+            <svg viewBox="0 0 24 24">
+                <circle cx="12" cy="8" r="4" />
+                <path d="M6 20c0-3.333 2.667-6 6-6s6 2.667 6 6" />
+            </svg>
+            <div class="user-dropdown">
+                <a href="/loginUsuario" id="user-status">Login</a>
+                <a href="/" id="user-details">Convidado</a>
+            </div>
+        </div>
+    </div>
+    
   <div class="container">
     <h2>Cadastrar Nova Questão</h2>
     <form id="questao-form">
@@ -21,24 +48,24 @@
       </select>
 
       <label for="pergunta">Pergunta:</label>
-      <textarea id="pergunta" name="pergunta" rows="3" required></textarea>
+      <textarea id="pergunta" name="pergunta" rows="3" maxlength="1000" required></textarea>
 
       <label>Insira as Respostas e selecione a correta:</label>
       <div class="resposta-group">
         <input type="radio" name="resposta_correta" value="0" />
-        <input type="text" name="resposta[]" required />
+        <input type="text" name="resposta[]" maxlength="500" required />
       </div>
       <div class="resposta-group">
         <input type="radio" name="resposta_correta" value="1" />
-        <input type="text" name="resposta[]" required />
+        <input type="text" name="resposta[]" maxlength="500" required />
       </div>
       <div class="resposta-group">
         <input type="radio" name="resposta_correta" value="2" />
-        <input type="text" name="resposta[]" required />
+        <input type="text" name="resposta[]" maxlength="500" required />
       </div>
       <div class="resposta-group">
         <input type="radio" name="resposta_correta" value="3" />
-        <input type="text" name="resposta[]" required />
+        <input type="text" name="resposta[]" maxlength="500" required />
       </div>
 
       <label>Selecione a Dificuldade da questão:</label>
@@ -52,10 +79,25 @@
 
       <button type="submit" class="btn-questao">Cadastrar Questão</button>
       <button class="btn-questao delete" style="display: none;">Deletar Questão</button>
+      <button class="btn-questao orange">Voltar para o cadastro de cursos</button>
     </form>
   </div>
 <script src="/javascript/cookies.js"></script>
   <script>
+
+    const nome = getCookie("nomeUsuario");
+    const tipo = getCookie("tipoUsuario");
+    document.getElementById("user-status").text = nome;
+    document.getElementById("user-details").text = tipo;
+    const deslogar = document.createElement("a");
+    deslogar.text = "Deslogar";
+    deslogar.addEventListener("click", () => {
+        deleteCookie("JWT");
+        deleteCookie("nomeUsuario");
+        deleteCookie("tipoUsuario");
+        location.href = "/";
+    })
+    document.getElementsByClassName("user-dropdown")[0].appendChild(deslogar);
 
   const JWT = getCookie("JWT");
     //script ainda nao foi testado!!
@@ -180,9 +222,16 @@
           deletarQuestao();
         });
 
+        document.getElementsByClassName("orange")[0].addEventListener("click", function(e) {
+          e.preventDefault();
+          window.location.href = "/cadastrarCurso";
+        });
+
         document.getElementById("disciplina").addEventListener("change", function() {
           idDisciplina = this.value;
           carregarQuestoes();
+          document.getElementsByClassName("btn-questao")[0].textContent = "Cadastrar Questão";
+              document.getElementsByClassName("delete")[0].style.display = "none";
         });
 
           document.getElementById("perguntas").addEventListener("change", function() {
