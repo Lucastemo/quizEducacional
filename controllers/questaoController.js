@@ -35,7 +35,8 @@ const questaoController = {
     },
 
     editarQuestao: async (req, res) => {
-        const { id, enunciado, dificuldade } = req.body;
+        const { id } = req.params;
+        const { enunciado, dificuldade } = req.body;
 
         try {
             if (!id || !enunciado || dificuldade === undefined) {

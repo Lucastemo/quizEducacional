@@ -167,7 +167,7 @@
             })
             .then(() => {
               alert("Questão deletada com sucesso!");
-              carregarQuestoes();
+              window.location.href = `/cadastrarQuestao/${idCurso}/${idDisciplina}`;
             })
             .catch(err => {
               console.error(err);
@@ -329,6 +329,47 @@
           .catch(err => {
             console.error(err);
             alert("Erro ao cadastrar a questão.");
+          });
+        }else{
+          fetch(`/api/questao/${questao}`, {
+            method: "PUT",
+            headers: { 
+              "Content-Type": "application/json",
+              "x-access-token": JWT
+            },
+            body: JSON.stringify({
+              enunciado: pergunta,
+              dificuldade: parseInt(dificuldade)
+            })
+          })
+          .then(res => {
+            if (!res.ok) throw new Error("Erro ao editar");
+            return res.json();
+          })
+          .then(() => {
+            // Atualizar alternativas
+            const promises = respostas.map((texto, i) => {
+              return fetch(`/api/alternativa/${respostasIds[i]}`, {
+                method: "PUT",
+                headers: {
+                  "Content-Type": "application/json",
+                  "x-access-token": JWT
+                },
+                body: JSON.stringify({
+                  texto: texto,
+                  correta: respostasRadio[i].checked
+                })
+              });
+            });
+            return Promise.all(promises);
+          })
+          .then(() => {
+            alert("Questão editada com sucesso!");
+            window.location.href = `/cadastrarQuestao/${idCurso}/${idDisciplina}`;
+          })
+          .catch(err => {
+            console.error(err);
+            alert("Erro ao editar a questão.");
           });
         }
       });

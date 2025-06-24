@@ -96,7 +96,7 @@ app.get('/api/questao/especifica/:id', usuarioController.verificarToken, usuario
 app.get('/api/questao/todas/:id_disciplina', usuarioController.verificarToken, usuarioController.verificarAdmin, questaoController.consultarTodasQuestoes);
 app.get('/api/questao/:id_disciplina', usuarioController.verificarToken, questaoController.consultarQuestao);
 app.post('/api/questao', usuarioController.verificarToken, usuarioController.verificarAdmin ,questaoController.cadastrarQuestao);
-app.put('/api/questao', usuarioController.verificarToken, usuarioController.verificarAdmin, questaoController.editarQuestao);
+app.put('/api/questao/:id', usuarioController.verificarToken, usuarioController.verificarAdmin, questaoController.editarQuestao);
 app.delete('/api/questao/:id', usuarioController.verificarToken, usuarioController.verificarAdmin, questaoController.excluirQuestao);
 
 // ROTAS PARA alternativaController
@@ -104,7 +104,7 @@ app.delete('/api/alternativa/por-questao/:id_questao', usuarioController.verific
 app.get('/api/alternativa/:id_questao', usuarioController.verificarToken, alternativaController.consultarAlternativa);
 app.post('/api/alternativa/respostas', usuarioController.verificarToken, alternativaController.verificarRespostas);
 app.post('/api/alternativa', usuarioController.verificarToken, usuarioController.verificarAdmin, alternativaController.cadastrarAlternativa);
-app.put('/api/alternativa', usuarioController.verificarToken, usuarioController.verificarAdmin, alternativaController.editarAlternativa);
+app.put('/api/alternativa/:id', usuarioController.verificarToken, usuarioController.verificarAdmin, alternativaController.editarAlternativa);
 app.delete('/api/alternativa/:id', usuarioController.verificarToken, usuarioController.verificarAdmin, alternativaController.excluirAlternativa);
 
 

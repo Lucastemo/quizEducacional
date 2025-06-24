@@ -29,7 +29,8 @@ const alternativaController = {
     },
 
     editarAlternativa: async (req, res) => {
-        const { id, texto, correta } = req.body;
+        const { id } = req.params;
+        const { texto, correta } = req.body;
 
         try {
             if (!id || !texto || correta === undefined) {
