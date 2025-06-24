@@ -3,7 +3,7 @@ const usuarioModel = require('../models/usuarioModel.js'); // inserir diretorio 
 const jwt = require('jsonwebtoken'); 
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
-const SECRET = "palavraSecreta"
+const SECRET = process.env.JWT_SECRET;
 const tokensRecuperacao = {};
 
 const usuarioController = {

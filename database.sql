@@ -476,3 +476,6 @@ BEGIN
 END //
 
 DELIMITER ;
+
+INSERT INTO USUARIO (NOME, SENHA, EMAIL, TIPO, PONTOS)
+VALUES ('Admin', 'adm123', 'adm@email.com', 'admin', 0);

@@ -39,7 +39,7 @@
     <form id="questao-form">
       <label for="disciplina">Disciplina:</label>
       <select id="disciplina" name="disciplina" required>
-        <option value="">Selecione uma disciplina</option>
+        <option value="-1">Selecione uma disciplina</option>
       </select>
       
       <label for="perguntas">Perguntas:</label>
@@ -228,10 +228,17 @@
         });
 
         document.getElementById("disciplina").addEventListener("change", function() {
-          idDisciplina = this.value;
-          carregarQuestoes();
           document.getElementsByClassName("btn-questao")[0].textContent = "Cadastrar Questão";
-              document.getElementsByClassName("delete")[0].style.display = "none";
+          document.getElementsByClassName("delete")[0].style.display = "none";
+          idDisciplina = this.value;
+          if(idDisciplina === "-1") {
+            document.getElementById("perguntas").innerHTML = '<option value="-1" selected="true">Criar nova questão</option>';
+            limparCampos();
+            document.getElementsByClassName("btn-questao")[0].disabled = true;
+            return;
+          }
+          carregarQuestoes();
+          document.getElementsByClassName("btn-questao")[0].disabled = false;
         });
 
           document.getElementById("perguntas").addEventListener("change", function() {
