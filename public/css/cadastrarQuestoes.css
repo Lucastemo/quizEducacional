@@ -138,3 +138,11 @@ input[type="radio"]:checked + input[type="text"] {
     transform: scale(1.02);
     box-shadow: 0 4px 12px rgba(50, 205, 50, 0.5);
 }
+
+.delete {
+    background: #ff4d4d;
+}
+
+.delete:hover {
+    box-shadow: 0 4px 12px rgba(255, 77, 77, 0.5);
+}

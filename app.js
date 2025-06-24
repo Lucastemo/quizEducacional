@@ -100,6 +100,7 @@ app.put('/api/questao', usuarioController.verificarToken, usuarioController.veri
 app.delete('/api/questao/:id', usuarioController.verificarToken, usuarioController.verificarAdmin, questaoController.excluirQuestao);
 
 // ROTAS PARA alternativaController
+app.delete('/api/alternativa/por-questao/:id_questao', usuarioController.verificarToken, usuarioController.verificarAdmin, alternativaController.excluirAlternativasPorQuestao);
 app.get('/api/alternativa/:id_questao', usuarioController.verificarToken, alternativaController.consultarAlternativa);
 app.post('/api/alternativa/respostas', usuarioController.verificarToken, alternativaController.verificarRespostas);
 app.post('/api/alternativa', usuarioController.verificarToken, usuarioController.verificarAdmin, alternativaController.cadastrarAlternativa);

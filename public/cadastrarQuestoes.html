@@ -51,6 +51,7 @@
       </div>
 
       <button type="submit" class="btn-questao">Cadastrar Questão</button>
+      <button class="btn-questao delete" style="display: none;">Deletar Questão</button>
     </form>
   </div>
 <script src="/javascript/cookies.js"></script>
@@ -131,6 +132,54 @@
         }
         carregarQuestoes();
 
+        function deletarQuestao() {
+          const selectedId = document.getElementById("perguntas").value;
+          if (selectedId === "-1") {
+            alert("Selecione uma questão para deletar.");
+            return;
+          }
+          if (!confirm("Tem certeza que deseja deletar esta questão?")) {
+            return;
+          }
+          fetch(`/api/alternativa/por-questao/${selectedId}`, {
+            method: "DELETE",
+            headers: {
+              "x-access-token": JWT
+            }
+          })
+          .then(res => {
+            if (!res.ok) throw new Error("Erro ao deletar alternativas");
+            return res.json();
+          })
+          .catch(err => {
+            console.error("Erro ao deletar alternativas:", err);
+            alert("Erro ao deletar as alternativas da questão.");
+          });
+          fetch(`/api/questao/${selectedId}`, {
+            method: "DELETE",
+            headers: {
+              "x-access-token": JWT
+            }
+          })
+            .then(res => {
+              if (!res.ok) throw new Error("Erro ao deletar questão");
+              return res.json();
+            })
+            .then(() => {
+              alert("Questão deletada com sucesso!");
+              carregarQuestoes();
+            })
+            .catch(err => {
+              console.error(err);
+              alert("Erro ao deletar a questão.");
+            });
+        }
+
+        document.getElementsByClassName("delete")[0].addEventListener("click", function(e) {
+          e.preventDefault();
+          deletarQuestao();
+        });
+
         document.getElementById("disciplina").addEventListener("change", function() {
           idDisciplina = this.value;
           carregarQuestoes();
@@ -140,8 +189,12 @@
             const selectedId = this.value;
             if (selectedId === "-1") {
               limparCampos();
+              document.getElementsByClassName("btn-questao")[0].textContent = "Cadastrar Questão";
+              document.getElementsByClassName("delete")[0].style.display = "none";
               return;
             }
+            document.getElementsByClassName("btn-questao")[0].textContent = "Editar Questão";
+            document.getElementsByClassName("delete")[0].style.display = "block";
             fetch(`/api/questao/especifica/${selectedId}`, {
               method: "GET",
               headers: {

@@ -101,7 +101,21 @@ const alternativaModel = {
         console.error('Error ao verificar resposta (ID)', error);
         throw error('Error ao verificar resposta (ID)');
         }
-    }
+    },
+
+    excluirAlternativasPorQuestao: async (id_questao) => {
+        try {
+            if (!id_questao) {
+                throw new Error('ID_questao é obrigatório!');
+            }
+            const sql = 'CALL excluir_alternativas_por_id_questao(?)';
+            await db.query(sql, [id_questao]);
+            return true;
+        } catch (error) {
+            console.error('Erro ao excluir alternativas por questão', error);
+            throw new Error('Erro ao excluir alternativas por questão');
+        }
+    },
 }
 
 module.exports = alternativaModel;

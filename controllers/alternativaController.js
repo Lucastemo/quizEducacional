@@ -145,7 +145,30 @@ const alternativaController = {
                 error: 'Erro interno ao verificar respostas.'
             });
         }
-    }
+    },
+
+    excluirAlternativasPorQuestao: async (req, res) => {
+        const { id_questao } = req.params;
+
+        try {
+            if (!id_questao) {
+                return res.status(400).json({
+                    error: 'id_questao é obrigatório.'
+                });
+            }
+
+            await alternativaModel.excluirAlternativasPorQuestao(id_questao);
+
+            return res.status(200).json({
+                message: 'Alternativas excluídas com sucesso!'
+            });
+        } catch (error) {
+            console.error('Erro ao excluir alternativas por questão: ', error);
+            return res.status(500).json({
+                error: 'Erro interno ao excluir alternativas por questão.'
+            });
+        }
+    },
 };
 
 module.exports = alternativaController;
