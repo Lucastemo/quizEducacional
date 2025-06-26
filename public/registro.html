@@ -144,6 +144,10 @@
         await fazerLogin(email, senha); // Chama a função de login após o registro
       } else {
         const errorData = await response.json();
+        if (errorData.error && errorData.error.includes("já está cadastrado")) {
+          alert(errorData.error);
+          return;
+        }
         console.log('Erro no registro:', errorData);
         alert('Erro no registro, tente novamente!');
       }

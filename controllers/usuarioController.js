@@ -34,6 +34,14 @@ const usuarioController = {
             }
         } catch (error) {
             console.error('Erro ao criar novo usuário: ', error);
+            if (error.message && error.message.includes('Duplicate entry')) {
+                // Ajusta regex para capturar apenas o nome do campo, ignorando o nome da tabela
+                const match = error.message.match(/Duplicate entry '.*' for key ['`"]?(?:\w+\.)?([^'`"]+)['`"]?/);
+                const campoDuplicado = match ? match[1] : 'campo';
+                return res.status(400).json({
+                    error: `Este ${campoDuplicado.toLowerCase()} já está cadastrado.`
+                });
+            }
             return res.status(500).json({
                 error: 'Erro interno ao criar novo usuário.'
             });
