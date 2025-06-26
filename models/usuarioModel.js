@@ -62,7 +62,7 @@ const usuarioModel =  {
             // A procedure agora retorna um SELECT com vários ids
             const [resultSets] = await db.query('CALL buscar_usuarios_acima_da_pontuacao(?, ?)', [pontos, quantidade]);
             // O resultado do SELECT está em resultSets[0]
-            const ids = resultSets[0].map(row => row.id);
+            const ids = resultSets[0].map(row => row.ID);
             return ids;
         } catch (error) {
             console.error('Erro ao buscar usuários acima da pontuação', error);
@@ -75,7 +75,7 @@ const usuarioModel =  {
             const [resultSets] = await db.query('CALL buscar_usuarios_abaixo_da_pontuacao(?, ?)', [pontos, quantidadeUsuarios]);
             // O resultado do SELECT está em resultSets[0]
             const ids = resultSets[0]
-                .map(row => row.id)
+                .map(row => row.ID)
                 .filter(userId => userId !== id);
             return ids;
         } catch (error) {
