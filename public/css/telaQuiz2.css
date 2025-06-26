@@ -162,6 +162,14 @@ select:focus {
   display: none;
 }
 
+.pontuacaoGanha {
+  position: absolute;
+  right: 30px;
+  top: 5px;
+  display: none;
+  transition: all 0.2s ease;
+}
+
 .navigation button, .button {
   flex: 1;
   padding: 14px;

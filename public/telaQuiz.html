@@ -161,7 +161,6 @@ function mostrarIniciarQuiz(){
     })
       .then(res => res.json())
       .then(data => {
-      console.log(data);
       if (Array.isArray(data.data) && data.data.length === 0) {
         botaoIniciarQuiz.disabled = true;
       } else {
@@ -280,12 +279,13 @@ function exibirPerguntas() {
       .map(([letra, arr]) => `
         <label>
           <input type="radio" name="resposta${index}" id="alternativa${letra}" value="${letra}" onchange="salvarResposta(${index}, '${letra}', ${arr[1]}); habilitarProximo()">
-          ${letra}) ${arr[0]}
+            ${letra}) ${arr[0].replace(/</g, "&lt;").replace(/>/g, "&gt;")}
         </label><br>
       `).join('');
 
     div.innerHTML = `
-      <h2>${index + 1}. ${pergunta.texto}</h2>
+      <h3 class="pontuacaoGanha" name="pontuacaoGanha">+0 Pontos</h3>
+      <h2>${index + 1}. ${pergunta.texto.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</h2>
       <div class="options">${htmlAlternativas}</div>
     `;
 
@@ -322,8 +322,16 @@ function restaurarRespostaMarcada(index) {
   }
 }
 
+function mostrarPontosGanhos(pontosGanhos){
+  document.getElementsByName("pontuacaoGanha").forEach(el => {
+        el.textContent = `+${pontosGanhos} Pontos`;
+        el.style.display = "block";
+        el.style.color = pontosGanhos !== 0 ? "green" : "darkred";
+      });
+}
+
 // Navega entre perguntas, respeitando limites
-function navegar(direcao) {
+async function navegar(direcao) {
   const nova = perguntaAtual + direcao;
   if (nova >= 0 && nova < perguntas.length) {
     // Desabilita todos os rádios da pergunta atual
@@ -355,9 +363,32 @@ function navegar(direcao) {
         });
       }
     }
+
+    // Envia a resposta do usuário para correção e exibe a pontuação da questão
+    const ultimaResposta = alternativasSelecionadas[perguntaAtual];
+    try {
+      const resposta = await fetch('/api/alternativa/respostas', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-access-token': JWT
+      },
+      body: JSON.stringify({ respostas: [ultimaResposta] })
+      });
+      const data = await resposta.json();
+      const pontos = Array.isArray(data.correcao) ? data.correcao[0] : 0;
+      mostrarPontosGanhos(pontos);
+        } catch (error) {
+      document.getElementsByName("pontuacaoGanha").forEach(el => {
+        el.textContent = "+0 Pontos";
+        el.style.display = "block";
+      });
+    }
+
     // Aguarda 3 segundos antes de ir para a próxima pergunta
     setTimeout(() => {
       perguntaAtual = nova;
+      document.getElementsByName("pontuacaoGanha").forEach(el => el.style.display = "none");
       mostrarPergunta(perguntaAtual);
     }, 3000);
   }
@@ -378,7 +409,7 @@ function atualizarNavegacao() {
 }
 
 // Finaliza o quiz, calcula acertos, pede nome e envia para servidor externo
-function finalizarQuiz() {
+async function finalizarQuiz() {
   const radios = document.getElementsByName(`resposta${perguntaAtual}`);
   const pergunta = perguntas[perguntaAtual];
   if (pergunta && pergunta.resposta_correta) {
@@ -399,6 +430,27 @@ function finalizarQuiz() {
       });
     }
     radios.forEach(radio => radio.disabled = true);
+
+    const ultimaResposta = alternativasSelecionadas[perguntaAtual];
+    try {
+      const resposta = await fetch('/api/alternativa/respostas', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-access-token': JWT
+      },
+      body: JSON.stringify({ respostas: [ultimaResposta] })
+      });
+      const data = await resposta.json();
+      const pontos = Array.isArray(data.correcao) ? data.correcao[0] : 0;
+      mostrarPontosGanhos(pontos);
+        } catch (error) {
+      document.getElementsByName("pontuacaoGanha").forEach(el => {
+        el.textContent = "+0 Pontos";
+        el.style.display = "block";
+      });
+    }
+    
     setTimeout(() => {
       // O resto da função continua aqui após 3 segundos
       let acertos = 0;
