@@ -42,10 +42,10 @@ DELIMITER //
 
 CREATE PROCEDURE buscar_usuario_maior_pontuacao(OUT usuario_id INT)
 BEGIN
-    SELECT id
+    SELECT ID
     INTO usuario_id
-    FROM Usuario
-    ORDER BY pontos DESC
+    FROM USUARIO
+    ORDER BY PONTOS DESC
     LIMIT 1;
 END //
 
@@ -57,10 +57,10 @@ CREATE PROCEDURE buscar_usuarios_acima_da_pontuacao(
     IN quantidade INT
 )
 BEGIN
-    SELECT id
-    FROM Usuario
-    WHERE pontos > pontuacao_limite
-    ORDER BY pontos ASC
+    SELECT ID
+    FROM USUARIO
+    WHERE PONTOS > pontuacao_limite
+    ORDER BY PONTOS ASC
     LIMIT quantidade;
 END //
 
@@ -72,10 +72,10 @@ CREATE PROCEDURE buscar_usuarios_abaixo_da_pontuacao(
     IN quantidade INT
 )
 BEGIN
-    SELECT id
-    FROM Usuario
-    WHERE pontos <= pontuacao_limite
-    ORDER BY pontos DESC
+    SELECT ID
+    FROM USUARIO
+    WHERE PONTOS <= pontuacao_limite
+    ORDER BY PONTOS DESC
     LIMIT quantidade;
 END //
 

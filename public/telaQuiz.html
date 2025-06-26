@@ -151,7 +151,27 @@ async function popularSelectDisciplinas() {
 function mostrarIniciarQuiz(){
   const selectDisciplina = document.getElementById("selecaoDisciplina");
   const botaoIniciarQuiz = document.getElementById("iniciarQuiz");
-  botaoIniciarQuiz.style.display = selectDisciplina.value == "none" ? "none" : "block";
+  const idDisciplina = selectDisciplina.value;
+  botaoIniciarQuiz.style.display = idDisciplina == "none" ? "none" : "block";
+  if (idDisciplina !== "none") {
+    fetch(`/api/questao/${idDisciplina}`, {
+      headers: {
+      'x-access-token': JWT
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+      console.log(data);
+      if (Array.isArray(data.data) && data.data.length === 0) {
+        botaoIniciarQuiz.disabled = true;
+      } else {
+        botaoIniciarQuiz.disabled = false;
+      }
+      })
+      .catch(() => {
+      botaoIniciarQuiz.disabled = true;
+      });
+  }
 }
 
 function irParaQuiz(){
