@@ -317,7 +317,7 @@ BEGIN
     SELECT * FROM QUESTAO
     WHERE ID_DISCIPLINA = p_id_disciplina
     ORDER BY RAND()
-    LIMIT 10;
+    LIMIT 5;
 END //
 
 DELIMITER ;

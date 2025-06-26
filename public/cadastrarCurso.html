@@ -85,6 +85,7 @@
                     // Adiciona o curso à página
                     createCourseElement(courseName, courseDesc);
                     carregarCursos();  // Atualiza a lista de cursos
+                    window.location.reload();
                 } else {
                     console.log('Erro ao criar o curso:', data.error);
                     alert('Erro ao criar o curso. Tente novamente.');
